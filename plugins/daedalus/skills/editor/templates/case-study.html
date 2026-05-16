@@ -1,0 +1,152 @@
+<!doctype html>
+<!--
+  Daedalus template: case-study
+  =============================
+  Customer success story. Problem → solution → before/after metrics +
+  testimonial quote. Designed for one-page sales handouts and partner
+  outreach.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{CUSTOMER_NAME}} — Case Study</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+@page { size: Letter portrait; margin: 0.5in; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #f0f0f0; }
+body { font-family: ui-sans-serif, system-ui, sans-serif; color: var(--dae-fg); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+.cs { max-width: 7.5in; margin: 0.5in auto; padding: 0.4in; background: var(--dae-bg); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+.cs-header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 0.12in; border-bottom: 2px solid var(--dae-accent); margin-bottom: 0.25in; }
+.cs-header .label { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dae-secondary); }
+
+.cs-customer h1 { font-size: 30px; line-height: 1.1; margin: 0 0 0.06in; color: var(--dae-primary); font-weight: 800; letter-spacing: -0.02em; }
+.cs-customer .context { font-size: 13px; color: var(--dae-secondary); margin: 0; }
+.cs-customer { margin-bottom: 0.3in; }
+
+.cs-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2in; margin-bottom: 0.3in; page-break-inside: avoid; }
+.split-side { padding: 0.2in 0.18in; border-radius: 8px; }
+.split-side.before { background: var(--dae-tint-4); border: 1.5px solid var(--dae-tint-2); }
+.split-side.after { background: var(--dae-primary); color: white; }
+.split-label { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 0.12in; }
+.split-side.before .split-label { color: var(--dae-secondary); }
+.split-side.after .split-label { color: var(--dae-tint-1); }
+.split-stats { margin: 0; padding: 0; list-style: none; }
+.split-stats li { padding: 6px 0; display: grid; grid-template-columns: 1in 1fr; gap: 10px; align-items: baseline; font-size: 12.5px; line-height: 1.35; }
+.split-stats .stat-num { font-weight: 800; font-size: 18px; line-height: 1; }
+.split-side.after .split-stats .stat-num { color: var(--dae-tint-1); }
+.split-side.before .split-stats .stat-num { color: var(--dae-warm); }
+
+.cs-narrative { margin-bottom: 0.3in; }
+.cs-narrative .eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dae-secondary); margin: 0 0 4px; }
+.cs-narrative h2 { font-size: 18px; font-weight: 700; color: var(--dae-primary); margin: 0 0 8px; }
+.cs-narrative p { font-size: 13px; line-height: 1.55; color: var(--dae-primary); margin: 0 0 10px; }
+
+.cs-quote { border-left: 4px solid var(--dae-warm); padding: 0.15in 0 0.15in 0.2in; margin-bottom: 0.25in; page-break-inside: avoid; }
+.cs-quote blockquote { font-size: 16px; line-height: 1.4; color: var(--dae-primary); font-style: italic; margin: 0 0 0.1in; max-width: 52ch; }
+.cs-quote cite { font-style: normal; font-size: 12px; color: var(--dae-secondary); }
+
+.cs-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 0.12in; border-top: 1.5px solid var(--dae-tint-2); font-family: ui-monospace, Menlo, monospace; font-size: 10px; color: var(--dae-secondary); }
+.cs-cta { background: var(--dae-warm); color: white; font-weight: 600; font-size: 12px; padding: 8px 16px; border-radius: 999px; text-decoration: none; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+@media print {
+  html, body { background: white !important; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cs { box-shadow: none; margin: 0; padding: 0; max-width: none; }
+  .cs-split, .cs-quote { page-break-inside: avoid; break-inside: avoid; }
+}
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="cs dae-sortable-container" data-pdf-root>
+
+  <header class="cs-header">
+    <span class="label" data-editable>Case study · {{INDUSTRY}}</span>
+    <span class="label" data-editable>{{PUBLISH_DATE}}</span>
+  </header>
+
+  <section class="cs-customer">
+    <h1 data-editable>{{CUSTOMER_NAME}}</h1>
+    <p class="context" data-editable>{{CUSTOMER_CONTEXT}}</p>
+  </section>
+
+  <section class="cs-narrative">
+    <p class="eyebrow">The challenge</p>
+    <h2 data-editable>{{CHALLENGE_HEADLINE}}</h2>
+    <p data-editable>{{CHALLENGE_BODY}}</p>
+  </section>
+
+  <section class="cs-narrative">
+    <p class="eyebrow">The solution</p>
+    <h2 data-editable>{{SOLUTION_HEADLINE}}</h2>
+    <p data-editable>{{SOLUTION_BODY}}</p>
+  </section>
+
+  <section class="cs-split">
+    <div class="split-side before">
+      <p class="split-label">Before</p>
+      <ul class="split-stats">
+        <li><span class="stat-num" data-editable>{{BEFORE_STAT_1}}</span><span data-editable>{{BEFORE_LABEL_1}}</span></li>
+        <li><span class="stat-num" data-editable>{{BEFORE_STAT_2}}</span><span data-editable>{{BEFORE_LABEL_2}}</span></li>
+        <li><span class="stat-num" data-editable>{{BEFORE_STAT_3}}</span><span data-editable>{{BEFORE_LABEL_3}}</span></li>
+      </ul>
+    </div>
+    <div class="split-side after">
+      <p class="split-label">After</p>
+      <ul class="split-stats">
+        <li><span class="stat-num" data-editable>{{AFTER_STAT_1}}</span><span data-editable>{{AFTER_LABEL_1}}</span></li>
+        <li><span class="stat-num" data-editable>{{AFTER_STAT_2}}</span><span data-editable>{{AFTER_LABEL_2}}</span></li>
+        <li><span class="stat-num" data-editable>{{AFTER_STAT_3}}</span><span data-editable>{{AFTER_LABEL_3}}</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-quote">
+    <blockquote data-editable>{{PULL_QUOTE}}</blockquote>
+    <cite data-editable>— {{QUOTE_NAME}}, {{QUOTE_TITLE}}</cite>
+  </section>
+
+  <footer class="cs-footer">
+    <span data-editable>{{COMPANY_URL}}</span>
+    <a href="{{CTA_LINK}}" class="cs-cta" data-editable>{{CTA_ACTION}}</a>
+  </footer>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

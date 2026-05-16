@@ -1,0 +1,30 @@
+/* ── Daedalus theme: Dark ──────────────────────────────────────────────
+   Dark surfaces, near-white text, cyan accent. Good for tech docs,
+   dashboards, terminal-aesthetic pages.
+   ──────────────────────────────────────────────────────────────────── */
+
+:root {
+  --dae-primary: #e6edf3;      /* near-white */
+  --dae-secondary: #8b949e;    /* muted gray */
+  --dae-accent: #58a6ff;       /* GitHub-blue cyan */
+  --dae-warm: #f78166;         /* coral */
+  --dae-tint-1: #1f6feb;       /* fills */
+  --dae-tint-2: #30363d;       /* borders */
+  --dae-tint-3: #21262d;       /* light surface */
+  --dae-tint-4: #161b22;       /* lightest surface */
+  --dae-bg: #0d1117;           /* page bg */
+  --dae-fg: #e6edf3;
+}
+
+html, body {
+  background: var(--dae-bg);
+  color-scheme: dark;
+}
+
+/* Editor chrome reads well on dark — the toolbar uses --dae-primary as bg
+   which would be near-white here. Override just the toolbar bg + status
+   color so the toolbar stays dark and readable. */
+.dae-edit-toolbar { background: #161b22 !important; border: 1px solid #30363d; }
+.dae-text-menu { background: #161b22 !important; border: 1px solid #30363d; }
+.dae-text-menu::after { border-top-color: #161b22 !important; }
+.dae-restore-prompt { background: #161b22 !important; border: 1px solid #30363d; }

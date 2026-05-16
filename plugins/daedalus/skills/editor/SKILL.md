@@ -25,10 +25,17 @@ Skip for: throwaway scratch pages, dev-targeted scripts, or anything that doesn'
 
 1. **Read `references/editor.md`** — that's the full reference. It contains the toolbar's HTML, CSS, and JS code blocks (copy them verbatim into your artifact), the markup contract for editable regions and photos, the theming hooks, and design rationale.
 
-2. **Pick a starting template** from `templates/`:
+2. **Pick a starting template** from `templates/` (see `templates/README.md` for the gallery):
    - `blank.html` — minimal scaffold, you fill in everything
-   - `onepager.html` — title + hero photo + 3-column proof + CTA
-   - `landing.html` — hero + features grid + CTA strip
+   - `onepager.html` — letter portrait: hero + 3-tile proof + CTA
+   - `landing.html` — hero + 2×2 features grid + CTA strip
+   - `blog-post.html` — long-form: byline + hero + body sections + pullquotes + callout
+   - `status-report.html` — exec summary + RAG status grid + milestones + risks + next steps
+   - `pricing-table.html` — 3-tier comparison columns with feature checkmarks
+   - `case-study.html` — customer + before/after metrics + pull quote + CTA
+   - `invitation.html` — event card: big date, location, agenda, RSVP
+
+   If none fit, copy `blank.html` and design from scratch — the markup contract is the same.
 
 3. **Replace the `<!-- DAE_* -->` markers** in the template by inlining the corresponding block from `references/editor.md`:
    - `<!-- DAE_EDIT_TOOLBAR_HERE -->` → the toolbar HTML block
@@ -46,7 +53,14 @@ Skip for: throwaway scratch pages, dev-targeted scripts, or anything that doesn'
 
 ## Themable, not branded
 
-Daedalus ships with neutral defaults (grays + a blue accent + a coral warm color). If the user wants brand colors, override the `--dae-*` CSS variables in their page's `:root`:
+Daedalus ships with neutral defaults (grays + a blue accent + a coral warm color), plus 4 preset themes in `themes/` that the user can copy-paste:
+
+- `themes/greek.css` — sepia parchment, terracotta + umber, serif
+- `themes/dark.css` — dark mode with cyan accents
+- `themes/minimal.css` — quiet grayscale, journalism-friendly
+- `themes/brutalist.css` — high-contrast black borders + mono headlines
+
+If the user wants brand colors, override the `--dae-*` CSS variables in their page's `:root`:
 
 ```css
 :root {

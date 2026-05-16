@@ -3,16 +3,16 @@
   "name": "daedalus-marketplace",
   "description": "Daedalus: a drop-in HTML editor that turns any static page into a round-trip editable, presentable, exportable artifact.",
   "owner": {
-    "name": "treynor-the-creator",
-    "url": "https://github.com/treynor-the-creator"
+    "name": "treynortetik-creator",
+    "url": "https://github.com/treynortetik-creator"
   },
   "plugins": [
     {
       "name": "daedalus",
       "description": "Generate self-contained HTML artifacts with a built-in editor — click anywhere to edit text, swap photos, reorder blocks, autosave to localStorage, export to PDF, present fullscreen. No build step, no install, works offline.",
       "author": {
-        "name": "treynor-the-creator",
-        "url": "https://github.com/treynor-the-creator"
+        "name": "treynortetik-creator",
+        "url": "https://github.com/treynortetik-creator"
       },
       "category": "content-tools",
       "source": "./plugins/daedalus"

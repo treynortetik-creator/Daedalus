@@ -1,0 +1,35 @@
+/* ── Daedalus theme: Brutalist ─────────────────────────────────────────
+   High-contrast, hard borders, monospace headlines. Think early-web
+   editorial design, indie zines, art-school portfolios.
+   ──────────────────────────────────────────────────────────────────── */
+
+:root {
+  --dae-primary: #000000;
+  --dae-secondary: #1a1a1a;
+  --dae-accent: #ff0066;       /* hot magenta */
+  --dae-warm: #ffcc00;         /* electric yellow */
+  --dae-tint-1: #ffe0eb;
+  --dae-tint-2: #000000;       /* yes, black borders */
+  --dae-tint-3: #f5f5f5;
+  --dae-tint-4: #ffffff;
+  --dae-bg: #ffffff;
+  --dae-fg: #000000;
+}
+
+html, body {
+  background: var(--dae-bg);
+  font-family: "IBM Plex Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+
+h1, h2, h3, h4 {
+  font-family: "IBM Plex Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+/* Hard borders, no rounding — brutalist hallmark */
+[data-pdf-root] *, .proof-tile, .lp-feature, .tier, .invite-when-where, .rag-card {
+  border-radius: 0 !important;
+}
+.proof-tile, .lp-feature, .tier, .rag-card { border-width: 2px !important; }

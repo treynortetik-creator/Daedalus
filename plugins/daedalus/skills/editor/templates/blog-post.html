@@ -1,0 +1,128 @@
+<!doctype html>
+<!--
+  Daedalus template: blog-post
+  ============================
+  Long-form article layout. Title + byline + hero image + body sections,
+  pullquotes, callout boxes. Good for blog posts, essays, explainers.
+
+  USAGE: see blank.html. Replace {{TOKEN}} placeholders and inline editor
+  blocks via the DAE_*_HERE markers.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{POST_TITLE}}</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--dae-bg); }
+body {
+  font-family: Charter, "Iowan Old Style", "Apple Garamond", Georgia, serif;
+  color: var(--dae-fg);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.post { max-width: 720px; margin: 0 auto; padding: 64px 32px 96px; }
+
+.post-eyebrow { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dae-accent); margin: 0 0 16px; }
+.post-title { font-size: 48px; line-height: 1.1; margin: 0 0 24px; color: var(--dae-primary); letter-spacing: -0.02em; font-weight: 700; }
+.post-deck { font-size: 21px; line-height: 1.45; color: var(--dae-secondary); margin: 0 0 32px; font-style: italic; }
+
+.post-byline { display: flex; gap: 16px; align-items: center; padding: 16px 0; border-top: 1px solid var(--dae-tint-2); border-bottom: 1px solid var(--dae-tint-2); margin-bottom: 48px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; }
+.post-byline .author { font-weight: 600; color: var(--dae-primary); }
+.post-byline .meta { color: var(--dae-secondary); }
+
+.post-hero { width: calc(100% + 64px); margin: -16px -32px 48px; height: 400px; object-fit: cover; display: block; border-radius: 0; }
+
+.post-body { font-size: 19px; }
+.post-body h2 { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 28px; font-weight: 700; line-height: 1.2; color: var(--dae-primary); margin: 56px 0 16px; letter-spacing: -0.015em; }
+.post-body h3 { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 21px; font-weight: 700; color: var(--dae-primary); margin: 40px 0 12px; }
+.post-body p { margin: 0 0 24px; }
+
+.pullquote { border-left: 4px solid var(--dae-accent); padding: 8px 0 8px 24px; margin: 40px 0; font-size: 24px; line-height: 1.4; color: var(--dae-primary); font-style: italic; }
+.pullquote cite { display: block; margin-top: 12px; font-style: normal; font-size: 14px; color: var(--dae-secondary); font-family: ui-sans-serif, system-ui, sans-serif; }
+
+.callout { background: var(--dae-tint-4); border-left: 4px solid var(--dae-warm); padding: 20px 24px; margin: 32px 0; border-radius: 4px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 15px; line-height: 1.55; color: var(--dae-primary); }
+.callout .callout-label { font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 11px; color: var(--dae-warm); margin: 0 0 4px; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="post dae-sortable-container" data-pdf-root>
+
+  <p class="post-eyebrow" data-editable>{{CATEGORY}}</p>
+  <h1 class="post-title" data-editable>{{POST_TITLE}}</h1>
+  <p class="post-deck" data-editable>{{POST_DECK}}</p>
+
+  <div class="post-byline">
+    <span class="author" data-editable>{{AUTHOR_NAME}}</span>
+    <span class="meta" data-editable>{{PUBLISH_DATE}} · {{READ_TIME}} min read</span>
+  </div>
+
+  <span class="dae-photo-wrap">
+    <img src="{{HERO_PHOTO_BASE64}}" alt="{{HERO_PHOTO_ALT}}" class="post-hero" data-editable-photo>
+  </span>
+
+  <div class="post-body dae-sortable-container">
+    <p data-editable>{{LEDE_PARAGRAPH}}</p>
+    <p data-editable>{{PARAGRAPH_2}}</p>
+
+    <h2 data-editable>{{SECTION_1_HEADING}}</h2>
+    <p data-editable>{{SECTION_1_PARAGRAPH_1}}</p>
+    <p data-editable>{{SECTION_1_PARAGRAPH_2}}</p>
+
+    <div class="pullquote">
+      <span data-editable>{{PULL_QUOTE}}</span>
+      <cite data-editable>— {{QUOTE_ATTRIBUTION}}</cite>
+    </div>
+
+    <h2 data-editable>{{SECTION_2_HEADING}}</h2>
+    <p data-editable>{{SECTION_2_PARAGRAPH_1}}</p>
+
+    <div class="callout">
+      <p class="callout-label" data-editable>Worth noting</p>
+      <p data-editable>{{CALLOUT_BODY}}</p>
+    </div>
+
+    <p data-editable>{{SECTION_2_PARAGRAPH_2}}</p>
+
+    <h2 data-editable>{{SECTION_3_HEADING}}</h2>
+    <p data-editable>{{SECTION_3_PARAGRAPH_1}}</p>
+    <p data-editable>{{CLOSING_PARAGRAPH}}</p>
+  </div>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

@@ -8,7 +8,7 @@
 
 ![Demo](docs/demo.gif)
 
-**[→ Try the live demo](https://treynor-the-creator.github.io/daedalus/)** (works in any browser — no install)
+**[→ Try the live demo](https://treynortetik-creator.github.io/Daedalus/)** (works in any browser — no install)
 
 You ship one `.html` file. Whoever opens it gets a small toolbar at bottom-right. They click **Edit**, the page becomes WYSIWYG: click any outlined text to type, hover a photo to swap it, drag handles to reorder blocks, pop a floating menu for B/I/U/color/size/links, autosave to localStorage every 5 seconds, save as a clean PDF in one click, or present fullscreen.
 
@@ -18,15 +18,19 @@ No app. No install. No build step. No server. Works offline. One self-contained 
 
 ## What's in this repo
 
-A Claude Code plugin that generates Daedalus-equipped HTML artifacts on demand. Two pieces:
-
-- **The editor** — `plugins/daedalus/skills/editor/references/editor.md` is the canonical reference. It contains the toolbar's HTML, CSS, and JS as inline-able code blocks, plus the markup contract for editable regions, and the theming hooks. You can lift this into any HTML page by hand.
-- **The Claude Code skill** — invoke `/daedalus` and Claude scaffolds a fresh artifact for you with the editor baked in.
+| | |
+|---|---|
+| [`dist/editor.html`](dist/) | **Standalone single-file bundle** (~692 KB). Copy it, drop your content inside the `<article data-pdf-root>`, open in a browser. Zero install, no Claude needed. |
+| [`plugins/daedalus/skills/editor/templates/`](plugins/daedalus/skills/editor/templates/) | **8 starter templates** — blank, onepager, landing, blog post, status report, pricing table, case study, event invitation. |
+| [`plugins/daedalus/skills/editor/themes/`](plugins/daedalus/skills/editor/themes/) | **4 theme presets** — Greek/sepia, dark mode, minimal, brutalist. Copy-paste CSS overrides. |
+| [`plugins/daedalus/skills/editor/references/editor.md`](plugins/daedalus/skills/editor/references/editor.md) | **The canonical editor reference** — toolbar HTML/CSS/JS as inline-able code blocks + the markup contract + design rationale. ~2,200 lines. |
+| [`plugins/daedalus/`](plugins/daedalus/) | **Claude Code plugin** — invoke `/daedalus` and Claude scaffolds an artifact for you with the editor baked in. |
+| [`examples/`](examples/) | **Sample artifact** — the Daedalus & Sons onepager from the demo GIF, ready to open in any browser. |
 
 ## Install (Claude Code)
 
 ```bash
-/plugin marketplace add treynor-the-creator/daedalus
+/plugin marketplace add treynortetik-creator/Daedalus
 /plugin install daedalus@daedalus-marketplace
 ```
 
@@ -40,18 +44,21 @@ Claude will ask what kind of page (one-pager, landing, blank) and what it's abou
 
 ## Use without Claude Code
 
-You don't need Claude. Lift the editor into your own HTML directly:
+You don't need Claude. Two paths:
 
-1. Clone this repo (or just download the relevant files).
-2. Copy the HTML, CSS, and JS blocks from `plugins/daedalus/skills/editor/references/editor.md` into the bottom of your page.
-3. Copy the three vendored JS files from `plugins/daedalus/skills/editor/assets/` and inline them as `<script>` blocks (no CDN — artifacts must work offline).
-4. Mark editable regions on your existing content:
+**Easy mode** — grab [`dist/editor.html`](dist/editor.html), rename it, replace the placeholder content inside `<article data-pdf-root>` with your own. The editor is already wired up. Open in any browser.
+
+**Hand-roll mode** — lift the editor into an existing page of yours:
+
+1. Copy the HTML, CSS, and JS blocks from [`plugins/daedalus/skills/editor/references/editor.md`](plugins/daedalus/skills/editor/references/editor.md) into the bottom of your page.
+2. Copy the three vendored JS files from [`plugins/daedalus/skills/editor/assets/`](plugins/daedalus/skills/editor/assets/) and inline them as `<script>` blocks (no CDN — artifacts must work offline).
+3. Mark editable regions on your existing content:
    - `data-editable` on any text element you want clickable-to-edit
    - Wrap photos in `<span class="dae-photo-wrap"><img class="..." data-editable-photo></span>`
    - Mark sortable parent containers with `class="dae-sortable-container"`
    - Mark the top-level wrapper with `data-pdf-root` (this is what the PDF/restore code captures)
 
-That's the whole contract. Full details in `editor.md`.
+That's the whole contract. Full details in [editor.md](plugins/daedalus/skills/editor/references/editor.md).
 
 ## What the toolbar does
 
@@ -74,7 +81,16 @@ That's the whole contract. Full details in `editor.md`.
 
 ## Theming
 
-The editor's chrome reads from `--dae-*` CSS variables (with sensible fallbacks baked in). Override these in your page's `:root` to brand it:
+The editor's chrome reads from `--dae-*` CSS variables (with sensible fallbacks baked in). Four preset themes ship in [`plugins/daedalus/skills/editor/themes/`](plugins/daedalus/skills/editor/themes/):
+
+| Theme | Vibe |
+|---|---|
+| `greek.css` | Sepia parchment, terracotta + umber, serif — fine-press editorial |
+| `dark.css` | Near-black surfaces, cyan accent — terminal / tech docs |
+| `minimal.css` | Quiet grayscale, journalism-friendly |
+| `brutalist.css` | Black borders, mono headlines, hot magenta — zines + portfolios |
+
+To roll your own, override the 10 variables in your page's `:root`:
 
 ```css
 :root {
@@ -131,4 +147,4 @@ The editor pattern is heavily inspired by Notion's and Medium's inline editing U
 
 ---
 
-Built with Claude Code by [@treynor-the-creator](https://github.com/treynor-the-creator).
+Built with Claude Code by [@treynortetik-creator](https://github.com/treynortetik-creator).

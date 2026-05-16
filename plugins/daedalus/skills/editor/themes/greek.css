@@ -1,0 +1,31 @@
+/* ── Daedalus theme: Greek / sepia ─────────────────────────────────────
+   Parchment background, terracotta + umber palette, serif body.
+   Pairs well with classical illustrations, fine-press editorial designs,
+   anything that wants an "old book / private press" feel.
+
+   Drop into your page's <style> block (after the toolbar CSS) OR include
+   as a <link rel="stylesheet" href="themes/greek.css"> in the document head.
+   ──────────────────────────────────────────────────────────────────── */
+
+:root {
+  --dae-primary: #3d2817;      /* deep umber ink */
+  --dae-secondary: #6b4423;    /* mid sienna */
+  --dae-accent: #b8390e;       /* terracotta red */
+  --dae-warm: #c25b2c;         /* warm clay */
+  --dae-tint-1: #d4a574;       /* tan */
+  --dae-tint-2: #c8a882;       /* warm border */
+  --dae-tint-3: #e8d5b7;       /* cream */
+  --dae-tint-4: #f6f0e6;       /* paper */
+  --dae-bg: #fdf8f0;           /* parchment */
+  --dae-fg: #3d2817;
+}
+
+html, body {
+  background: #2a1810 !important;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0.02em;
+}

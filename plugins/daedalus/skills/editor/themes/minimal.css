@@ -1,0 +1,22 @@
+/* ── Daedalus theme: Minimal ───────────────────────────────────────────
+   Quiet, modern, neutral. No accent colors fighting for attention.
+   Best for long-form content where the type should do the work.
+   ──────────────────────────────────────────────────────────────────── */
+
+:root {
+  --dae-primary: #111827;      /* near-black */
+  --dae-secondary: #6b7280;    /* mid gray */
+  --dae-accent: #374151;       /* dark gray (no flashy accent) */
+  --dae-warm: #ef4444;         /* used ONLY for the PDF button + 4th color swatch */
+  --dae-tint-1: #e5e7eb;       /* fills */
+  --dae-tint-2: #e5e7eb;       /* borders */
+  --dae-tint-3: #f3f4f6;       /* light surface */
+  --dae-tint-4: #f9fafb;       /* lightest surface */
+  --dae-bg: #ffffff;
+  --dae-fg: #111827;
+}
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  background: var(--dae-bg);
+}

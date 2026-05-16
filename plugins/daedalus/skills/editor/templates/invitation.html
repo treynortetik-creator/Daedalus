@@ -1,0 +1,127 @@
+<!doctype html>
+<!--
+  Daedalus template: invitation
+  =============================
+  Event invitation. Big date, location, agenda strip, RSVP button.
+  Visually distinct from business docs — feels like a save-the-date.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{EVENT_NAME}}</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--dae-tint-4); }
+body { font-family: ui-sans-serif, system-ui, sans-serif; color: var(--dae-fg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+
+.invite { max-width: 640px; margin: 80px auto; padding: 64px 48px; background: var(--dae-bg); border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10); text-align: center; }
+
+.invite-eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 12px; letter-spacing: 0.20em; text-transform: uppercase; color: var(--dae-warm); margin: 0 0 24px; }
+.invite-host { font-size: 16px; color: var(--dae-secondary); margin: 0 0 8px; font-style: italic; }
+.invite-name { font-size: 48px; line-height: 1.05; margin: 0 0 24px; color: var(--dae-primary); font-weight: 800; letter-spacing: -0.02em; }
+.invite-tagline { font-size: 17px; color: var(--dae-secondary); margin: 0 0 40px; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+.invite-when-where {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 28px 24px;
+  border-top: 2px solid var(--dae-primary);
+  border-bottom: 2px solid var(--dae-primary);
+  margin-bottom: 40px;
+  text-align: left;
+}
+.invite-when-where .label { font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dae-accent); margin: 0 0 6px; }
+.invite-when-where .value-primary { font-size: 22px; font-weight: 700; color: var(--dae-primary); margin: 0 0 4px; line-height: 1.2; }
+.invite-when-where .value-secondary { font-size: 14px; color: var(--dae-secondary); margin: 0; }
+
+.invite-agenda { text-align: left; margin-bottom: 40px; }
+.invite-agenda h3 { font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dae-secondary); margin: 0 0 16px; }
+.invite-agenda ul { list-style: none; padding: 0; margin: 0; }
+.invite-agenda li { display: grid; grid-template-columns: 80px 1fr; gap: 16px; padding: 10px 0; border-bottom: 1px dashed var(--dae-tint-2); font-size: 14px; align-items: baseline; }
+.invite-agenda li:last-child { border-bottom: 0; }
+.invite-agenda .time { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--dae-accent); font-weight: 600; }
+.invite-agenda .item { color: var(--dae-primary); }
+
+.invite-rsvp { display: inline-block; background: var(--dae-warm); color: white; font-weight: 700; font-size: 16px; padding: 16px 40px; border-radius: 999px; text-decoration: none; letter-spacing: 0.02em; }
+.invite-rsvp-note { font-size: 13px; color: var(--dae-secondary); margin: 16px 0 0; }
+
+.invite-footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--dae-tint-2); font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-secondary); letter-spacing: 0.04em; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="invite dae-sortable-container" data-pdf-root>
+
+  <p class="invite-eyebrow" data-editable>{{EYEBROW}}</p>
+  <p class="invite-host" data-editable>{{HOST}} invites you to</p>
+  <h1 class="invite-name" data-editable>{{EVENT_NAME}}</h1>
+  <p class="invite-tagline" data-editable>{{EVENT_TAGLINE}}</p>
+
+  <div class="invite-when-where">
+    <div>
+      <p class="label">When</p>
+      <p class="value-primary" data-editable>{{EVENT_DATE}}</p>
+      <p class="value-secondary" data-editable>{{EVENT_TIME}}</p>
+    </div>
+    <div>
+      <p class="label">Where</p>
+      <p class="value-primary" data-editable>{{EVENT_VENUE}}</p>
+      <p class="value-secondary" data-editable>{{EVENT_ADDRESS}}</p>
+    </div>
+  </div>
+
+  <section class="invite-agenda">
+    <h3>Agenda</h3>
+    <ul class="dae-sortable-container">
+      <li><span class="time" data-editable>{{AGENDA_TIME_1}}</span><span class="item" data-editable>{{AGENDA_ITEM_1}}</span></li>
+      <li><span class="time" data-editable>{{AGENDA_TIME_2}}</span><span class="item" data-editable>{{AGENDA_ITEM_2}}</span></li>
+      <li><span class="time" data-editable>{{AGENDA_TIME_3}}</span><span class="item" data-editable>{{AGENDA_ITEM_3}}</span></li>
+      <li><span class="time" data-editable>{{AGENDA_TIME_4}}</span><span class="item" data-editable>{{AGENDA_ITEM_4}}</span></li>
+    </ul>
+  </section>
+
+  <a href="{{RSVP_LINK}}" class="invite-rsvp" data-editable>{{RSVP_LABEL}}</a>
+  <p class="invite-rsvp-note" data-editable>{{RSVP_NOTE}}</p>
+
+  <footer class="invite-footer">
+    <span data-editable>{{FOOTER_TEXT}}</span>
+  </footer>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

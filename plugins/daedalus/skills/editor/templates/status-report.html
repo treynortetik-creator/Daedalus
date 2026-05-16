@@ -1,0 +1,206 @@
+<!doctype html>
+<!--
+  Daedalus template: status-report
+  ================================
+  Multi-section project status. Exec summary + RAG status grid + milestone
+  timeline + risks & mitigations + next steps. Good for weekly/monthly
+  team updates, exec briefings, project handoffs.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PROJECT_NAME}} — Status Report</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+  --rag-green: #16a34a;
+  --rag-amber: #d97706;
+  --rag-red: #dc2626;
+}
+
+@page { size: Letter portrait; margin: 0.5in; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #f0f0f0; }
+body { font-family: ui-sans-serif, system-ui, sans-serif; color: var(--dae-fg); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+.report { max-width: 8in; margin: 0.5in auto; padding: 0.5in; background: var(--dae-bg); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+.r-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 0.2in; border-bottom: 3px solid var(--dae-primary); margin-bottom: 0.3in; }
+.r-header h1 { font-size: 22px; font-weight: 700; color: var(--dae-primary); margin: 0; }
+.r-header .r-subtitle { font-size: 13px; color: var(--dae-secondary); margin: 4px 0 0; }
+.r-header .r-meta { text-align: right; font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-secondary); letter-spacing: 0.04em; }
+
+.r-section { margin-bottom: 0.35in; }
+.r-section h2 { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dae-secondary); margin: 0 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--dae-tint-2); }
+.r-section p { font-size: 14px; line-height: 1.55; margin: 0 0 10px; color: var(--dae-primary); }
+
+.exec-summary { background: var(--dae-tint-4); border-left: 4px solid var(--dae-accent); padding: 14px 18px; border-radius: 4px; font-size: 14px; line-height: 1.55; color: var(--dae-primary); }
+
+.rag-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.rag-card { padding: 14px 16px; border-radius: 8px; border: 1.5px solid var(--dae-tint-2); }
+.rag-card.green { border-color: var(--rag-green); background: rgba(22, 163, 74, 0.06); }
+.rag-card.amber { border-color: var(--rag-amber); background: rgba(217, 119, 6, 0.06); }
+.rag-card.red { border-color: var(--rag-red); background: rgba(220, 38, 38, 0.06); }
+.rag-card .rag-label { font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 6px; }
+.rag-card.green .rag-label { color: var(--rag-green); }
+.rag-card.amber .rag-label { color: var(--rag-amber); }
+.rag-card.red .rag-label { color: var(--rag-red); }
+.rag-card .rag-area { font-size: 14px; font-weight: 600; color: var(--dae-primary); margin: 0 0 4px; }
+.rag-card .rag-note { font-size: 12px; color: var(--dae-secondary); margin: 0; line-height: 1.4; }
+
+.milestones { display: flex; flex-direction: column; gap: 8px; }
+.milestone { display: grid; grid-template-columns: 1in 1fr auto; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--dae-tint-2); align-items: baseline; font-size: 13px; }
+.milestone .m-date { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-secondary); }
+.milestone .m-name { color: var(--dae-primary); font-weight: 500; }
+.milestone .m-status { font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; letter-spacing: 0.06em; text-transform: uppercase; }
+.milestone .m-status.done { background: var(--rag-green); color: white; }
+.milestone .m-status.wip  { background: var(--dae-tint-1); color: var(--dae-accent); }
+.milestone .m-status.todo { background: var(--dae-tint-3); color: var(--dae-secondary); }
+
+.risk { display: grid; grid-template-columns: 0.7in 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--dae-tint-3); font-size: 13px; }
+.risk:last-child { border-bottom: 0; }
+.risk .r-level { font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; text-align: center; padding: 4px 8px; border-radius: 4px; height: fit-content; }
+.risk .r-level.high { background: var(--rag-red); color: white; }
+.risk .r-level.med  { background: var(--rag-amber); color: white; }
+.risk .r-level.low  { background: var(--rag-green); color: white; }
+.risk .r-text { color: var(--dae-primary); line-height: 1.5; }
+.risk .r-text strong { display: block; margin-bottom: 4px; }
+.risk .r-text .r-mit { color: var(--dae-secondary); font-size: 12px; }
+
+ul.next-steps { list-style: none; padding: 0; margin: 0; }
+ul.next-steps li { display: grid; grid-template-columns: 16px 1fr 1in; gap: 10px; padding: 8px 0; font-size: 13px; align-items: baseline; border-bottom: 1px dashed var(--dae-tint-3); }
+ul.next-steps li::before { content: "□"; color: var(--dae-secondary); font-size: 16px; line-height: 1; }
+ul.next-steps li .owner { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-accent); text-align: right; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+@media print {
+  html, body { background: white !important; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .report { box-shadow: none; margin: 0; padding: 0; max-width: none; }
+  .r-section, .rag-card, .milestone, .risk { page-break-inside: avoid; }
+}
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="report dae-sortable-container" data-pdf-root>
+
+  <header class="r-header">
+    <div>
+      <h1 data-editable>{{PROJECT_NAME}}</h1>
+      <p class="r-subtitle" data-editable>{{REPORT_SUBTITLE}}</p>
+    </div>
+    <div class="r-meta">
+      <div data-editable>Week of {{WEEK_OF}}</div>
+      <div data-editable>Reporter: {{REPORTER_NAME}}</div>
+    </div>
+  </header>
+
+  <section class="r-section">
+    <h2>Executive summary</h2>
+    <div class="exec-summary" data-editable>{{EXEC_SUMMARY}}</div>
+  </section>
+
+  <section class="r-section">
+    <h2>Workstream status</h2>
+    <div class="rag-grid dae-sortable-container">
+      <div class="rag-card green">
+        <p class="rag-label">On track</p>
+        <p class="rag-area" data-editable>{{GREEN_AREA}}</p>
+        <p class="rag-note" data-editable>{{GREEN_NOTE}}</p>
+      </div>
+      <div class="rag-card amber">
+        <p class="rag-label">At risk</p>
+        <p class="rag-area" data-editable>{{AMBER_AREA}}</p>
+        <p class="rag-note" data-editable>{{AMBER_NOTE}}</p>
+      </div>
+      <div class="rag-card red">
+        <p class="rag-label">Blocked</p>
+        <p class="rag-area" data-editable>{{RED_AREA}}</p>
+        <p class="rag-note" data-editable>{{RED_NOTE}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="r-section">
+    <h2>Milestones</h2>
+    <div class="milestones dae-sortable-container">
+      <div class="milestone">
+        <span class="m-date" data-editable>{{MS1_DATE}}</span>
+        <span class="m-name" data-editable>{{MS1_NAME}}</span>
+        <span class="m-status done" data-editable>done</span>
+      </div>
+      <div class="milestone">
+        <span class="m-date" data-editable>{{MS2_DATE}}</span>
+        <span class="m-name" data-editable>{{MS2_NAME}}</span>
+        <span class="m-status wip" data-editable>in progress</span>
+      </div>
+      <div class="milestone">
+        <span class="m-date" data-editable>{{MS3_DATE}}</span>
+        <span class="m-name" data-editable>{{MS3_NAME}}</span>
+        <span class="m-status todo" data-editable>upcoming</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="r-section">
+    <h2>Risks &amp; mitigations</h2>
+    <div class="dae-sortable-container">
+      <div class="risk">
+        <span class="r-level high">High</span>
+        <div class="r-text">
+          <strong data-editable>{{RISK_1_TITLE}}</strong>
+          <span class="r-mit" data-editable>Mitigation: {{RISK_1_MITIGATION}}</span>
+        </div>
+      </div>
+      <div class="risk">
+        <span class="r-level med">Med</span>
+        <div class="r-text">
+          <strong data-editable>{{RISK_2_TITLE}}</strong>
+          <span class="r-mit" data-editable>Mitigation: {{RISK_2_MITIGATION}}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="r-section">
+    <h2>Next steps</h2>
+    <ul class="next-steps dae-sortable-container">
+      <li><span></span><span data-editable>{{NEXT_1}}</span><span class="owner" data-editable>@{{OWNER_1}}</span></li>
+      <li><span></span><span data-editable>{{NEXT_2}}</span><span class="owner" data-editable>@{{OWNER_2}}</span></li>
+      <li><span></span><span data-editable>{{NEXT_3}}</span><span class="owner" data-editable>@{{OWNER_3}}</span></li>
+    </ul>
+  </section>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>
