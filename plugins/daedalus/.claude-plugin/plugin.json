@@ -1,0 +1,23 @@
+{
+  "name": "daedalus",
+  "description": "Generate self-contained HTML artifacts with a built-in round-trip editor. End users open the file in any browser, click to edit text, swap photos, reorder blocks, apply formatting from a Medium-style floating menu, export to PDF, or present fullscreen. Autosaves to localStorage. No build step, no install, works offline.",
+  "version": "0.1.0",
+  "author": {
+    "name": "treynor-the-creator",
+    "url": "https://github.com/treynor-the-creator"
+  },
+  "homepage": "https://github.com/treynor-the-creator/daedalus",
+  "repository": "https://github.com/treynor-the-creator/daedalus",
+  "license": "MIT",
+  "keywords": [
+    "html",
+    "editor",
+    "round-trip",
+    "contenteditable",
+    "wysiwyg",
+    "pdf-export",
+    "self-contained",
+    "no-build",
+    "client-side"
+  ]
+}

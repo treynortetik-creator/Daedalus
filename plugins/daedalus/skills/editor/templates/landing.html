@@ -1,0 +1,139 @@
+<!doctype html>
+<!--
+  Daedalus template: landing
+  ==========================
+  Single-screen landing page. Hero band + 2x2 features grid + CTA strip.
+  Good for product launches, campaign pages, microsites.
+
+  USAGE: see blank.html. Same pattern — replace {{TOKEN}} placeholders and
+  inline editor blocks via the DAE_*_HERE markers.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PRODUCT_NAME}}</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  color: var(--dae-fg);
+  background: var(--dae-bg);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.lp-nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 48px; }
+.lp-nav h2 { margin: 0; font-size: 18px; font-weight: 700; color: var(--dae-primary); }
+.lp-nav a { color: var(--dae-secondary); text-decoration: none; font-size: 14px; }
+
+.lp-hero { padding: 80px 48px 64px; max-width: 1100px; margin: 0 auto; text-align: center; }
+.lp-hero .eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dae-accent); margin: 0 0 16px; }
+.lp-hero h1 { font-size: 56px; line-height: 1.05; margin: 0 0 24px; color: var(--dae-primary); font-weight: 800; letter-spacing: -0.02em; }
+.lp-hero p { font-size: 19px; max-width: 640px; margin: 0 auto 32px; color: var(--dae-secondary); }
+.lp-hero-action { display: inline-block; background: var(--dae-primary); color: white; font-weight: 600; font-size: 15px; padding: 14px 28px; border-radius: 999px; text-decoration: none; }
+
+.lp-hero-photo { width: 100%; max-width: 900px; margin: 48px auto 0; display: block; height: 420px; object-fit: cover; border-radius: 16px; }
+
+.lp-features { padding: 96px 48px; max-width: 1100px; margin: 0 auto; }
+.lp-features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; }
+.lp-feature { padding: 32px; background: var(--dae-tint-4); border-radius: 12px; }
+.lp-feature h3 { font-size: 22px; margin: 0 0 12px; color: var(--dae-primary); font-weight: 700; }
+.lp-feature p { font-size: 15px; margin: 0; color: var(--dae-secondary); }
+.lp-features > h2 { font-size: 32px; margin: 0; color: var(--dae-primary); font-weight: 700; text-align: center; }
+
+.lp-cta { background: var(--dae-primary); color: white; padding: 64px 48px; text-align: center; }
+.lp-cta h2 { font-size: 32px; margin: 0 0 16px; color: white; font-weight: 700; }
+.lp-cta p { font-size: 17px; margin: 0 0 28px; color: rgba(255,255,255,0.85); max-width: 540px; margin-left: auto; margin-right: auto; }
+.lp-cta-action { display: inline-block; background: var(--dae-warm); color: white; font-weight: 600; font-size: 15px; padding: 14px 28px; border-radius: 999px; text-decoration: none; }
+
+.lp-footer { padding: 32px 48px; text-align: center; font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-secondary); border-top: 1px solid var(--dae-tint-2); }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+
+.dae-photo-wrap { display: block; position: relative; }
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<div class="dae-sortable-container" data-pdf-root>
+
+  <nav class="lp-nav">
+    <h2 data-editable>{{PRODUCT_NAME}}</h2>
+    <a href="{{NAV_LINK}}" data-editable>{{NAV_LABEL}}</a>
+  </nav>
+
+  <section class="lp-hero">
+    <p class="eyebrow" data-editable>{{EYEBROW}}</p>
+    <h1 data-editable>{{HERO_HEADLINE}}</h1>
+    <p data-editable>{{HERO_SUBHEAD}}</p>
+    <a href="{{HERO_CTA_LINK}}" class="lp-hero-action" data-editable>{{HERO_CTA}}</a>
+    <span class="dae-photo-wrap">
+      <img src="{{HERO_PHOTO_BASE64}}" alt="{{HERO_PHOTO_ALT}}" class="lp-hero-photo" data-editable-photo>
+    </span>
+  </section>
+
+  <section class="lp-features">
+    <h2 data-editable>{{FEATURES_TITLE}}</h2>
+    <div class="lp-features-grid dae-sortable-container">
+      <div class="lp-feature">
+        <h3 data-editable>{{FEATURE_1_TITLE}}</h3>
+        <p data-editable>{{FEATURE_1_BODY}}</p>
+      </div>
+      <div class="lp-feature">
+        <h3 data-editable>{{FEATURE_2_TITLE}}</h3>
+        <p data-editable>{{FEATURE_2_BODY}}</p>
+      </div>
+      <div class="lp-feature">
+        <h3 data-editable>{{FEATURE_3_TITLE}}</h3>
+        <p data-editable>{{FEATURE_3_BODY}}</p>
+      </div>
+      <div class="lp-feature">
+        <h3 data-editable>{{FEATURE_4_TITLE}}</h3>
+        <p data-editable>{{FEATURE_4_BODY}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-cta">
+    <h2 data-editable>{{CTA_HEADLINE}}</h2>
+    <p data-editable>{{CTA_BODY}}</p>
+    <a href="{{CTA_LINK}}" class="lp-cta-action" data-editable>{{CTA_ACTION}}</a>
+  </section>
+
+  <footer class="lp-footer">
+    <span data-editable>{{FOOTER_TEXT}}</span>
+  </footer>
+
+</div>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

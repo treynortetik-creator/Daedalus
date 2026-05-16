@@ -1,0 +1,82 @@
+<!doctype html>
+<!--
+  Daedalus template: blank
+  ========================
+  Minimal scaffold — one editable heading and paragraph inside a card.
+  Use as a starting point when you want to design the whole layout.
+
+  USAGE:
+  - Replace each {{TOKEN}} with real content.
+  - Replace each <!-- DAE_*_HERE --> marker by inlining the corresponding
+    block from skills/editor/references/editor.md and skills/editor/assets/.
+  - Mark every editable text element with data-editable.
+  - Wrap photos in <span class="dae-photo-wrap"><img data-editable-photo></span>.
+  - Mark sortable containers with class="dae-sortable-container".
+  - The top-level wrapper has data-pdf-root — that's what PDF export captures.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PAGE_TITLE}}</title>
+<style>
+/* ── Theme variables — override these in your :root to brand the editor ── */
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #f0f0f0; }
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  color: var(--dae-fg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.doc {
+  max-width: 760px;
+  margin: 48px auto;
+  padding: 48px;
+  background: var(--dae-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+.doc h1 { font-size: 36px; line-height: 1.15; margin: 0 0 16px; color: var(--dae-primary); }
+.doc p  { font-size: 16px; margin: 0 0 16px; color: var(--dae-secondary); }
+
+@media print {
+  html, body { background: white !important; }
+  .doc { box-shadow: none; margin: 0; padding: 0; max-width: none; }
+}
+
+/* DAE_EDIT_CSS_HERE — inline the toolbar CSS from references/editor.md */
+</style>
+</head>
+<body>
+
+<article class="doc dae-sortable-container" data-pdf-root>
+  <h1 data-editable>{{HEADING}}</h1>
+  <p data-editable>{{BODY_PARAGRAPH}}</p>
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE — inline the toolbar HTML from references/editor.md -->
+<!-- DAE_SORTABLE_JS_HERE — inline assets/sortable.min.js inside a <script> tag -->
+<!-- DAE_HTML2CANVAS_JS_HERE — inline assets/html2canvas.min.js inside a <script> tag -->
+<!-- DAE_JSPDF_JS_HERE — inline assets/jspdf.umd.min.js inside a <script> tag -->
+
+<script>
+/* DAE_EDIT_JS_HERE — inline the toolbar JS from references/editor.md */
+</script>
+
+</body>
+</html>
