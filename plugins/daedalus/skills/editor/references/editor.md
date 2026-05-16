@@ -130,6 +130,10 @@ for lib in ("sortable.min.js", "html2canvas.min.js", "jspdf.umd.min.js"):
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
     <span>Versions</span>
   </button>
+  <button id="dae-comments-toggle" title="Comments">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    <span>Comments <span class="dae-comments-badge" id="dae-comments-badge">0</span></span>
+  </button>
   <button id="dae-present" title="Present mode — fullscreen, no chrome (Esc to exit)">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
     <span>Present</span>
@@ -159,6 +163,7 @@ for lib in ("sortable.min.js", "html2canvas.min.js", "jspdf.umd.min.js"):
   <button class="dae-tm-color dae-tm-color-reset" data-color="0" title="Reset color">×</button>
   <span class="dae-tm-divider"></span>
   <button id="dae-tm-link" class="dae-tm-btn" title="Link (Cmd/Ctrl+K)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+  <button id="dae-tm-comment" class="dae-tm-btn" title="Comment on selection"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></button>
 </div>
 
 <div class="dae-toast" id="dae-toast" role="status" aria-live="polite"></div>
@@ -169,6 +174,19 @@ for lib in ("sortable.min.js", "html2canvas.min.js", "jspdf.umd.min.js"):
   <button type="button" id="dae-restore-discard" class="dae-restore-secondary">Discard</button>
   <button type="button" id="dae-restore-apply" class="dae-restore-primary">Restore</button>
 </div>
+
+<!-- Comments side panel — slides in from right when toolbar's Comments button clicked -->
+<aside class="dae-comments-panel" id="dae-comments-panel" aria-hidden="true" aria-label="Comments">
+  <header class="dae-comments-header">
+    <h3>Comments</h3>
+    <button type="button" id="dae-comments-close" title="Close" aria-label="Close comments">×</button>
+  </header>
+  <div class="dae-comments-list" id="dae-comments-list"></div>
+  <div class="dae-comments-empty" id="dae-comments-empty">
+    <p>No comments yet.</p>
+    <p class="dae-comments-empty-hint">Enter edit mode, select text, and click the <strong>💬</strong> button in the floating menu.</p>
+  </div>
+</aside>
 
 <!-- Hyperlink editor modal -->
 <div class="dae-link-modal" id="dae-link-modal" role="dialog" aria-modal="true" aria-label="Edit link">
@@ -197,6 +215,7 @@ for lib in ("sortable.min.js", "html2canvas.min.js", "jspdf.umd.min.js"):
 <template id="tpl-callout"><div class="tldr"><p class="tldr-label">Callout</p><p data-editable>Callout text. Click to edit.</p></div></template>
 <template id="tpl-photo"><div class="dae-photo-block"><span class="dae-photo-wrap"><img class="inline-photo" data-editable-photo alt="New photo"></span><p class="photo-caption" data-editable>Photo caption.</p></div></template>
 <template id="tpl-spacer"><div class="dae-spacer" aria-hidden="true"></div></template>
+<template id="tpl-table"><div class="dae-table-block"><table class="dae-table"><thead><tr><th data-editable>Header 1</th><th data-editable>Header 2</th><th data-editable>Header 3</th></tr></thead><tbody><tr><td data-editable>Cell</td><td data-editable>Cell</td><td data-editable>Cell</td></tr><tr><td data-editable>Cell</td><td data-editable>Cell</td><td data-editable>Cell</td></tr></tbody></table><div class="dae-table-toolbar" aria-label="Table actions"><button type="button" data-table-action="row-below" title="Insert row below current">+ Row</button><button type="button" data-table-action="col-right" title="Insert column right of current">+ Col</button><button type="button" data-table-action="del-row" title="Delete current row">− Row</button><button type="button" data-table-action="del-col" title="Delete current column">− Col</button></div></div></template>
 ```
 
 ## Required CSS (inside the artifact's `<style>` block)
@@ -349,6 +368,22 @@ body.dae-edit-mode [data-editable-photo].dae-reposition-mode { cursor: move; out
 body.dae-edit-mode .dae-spacer { background: repeating-linear-gradient(45deg, var(--dae-tint-4, #f6f6f6), var(--dae-tint-4, #f6f6f6) 6px, transparent 6px, transparent 12px); border: 1.5px dashed var(--dae-tint-2, #d8d8d8); border-radius: 4px; min-height: 28px; position: relative; }
 body.dae-edit-mode .dae-spacer::after { content: "Spacer · drag corner to resize"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; color: var(--dae-secondary, #4a4a4a); letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.5; pointer-events: none; }
 
+/* Table block — inserted via insert menu. The wrapper <div class="dae-table-block"> holds
+   the table + a tiny actions toolbar revealed via :focus-within when any cell is focused. */
+.dae-table-block { display: block; }
+.dae-table { width: 100%; border-collapse: collapse; margin: 0; }
+.dae-table th, .dae-table td { padding: 8px 12px; border: 1px solid var(--dae-tint-2, #d8d8d8); text-align: left; vertical-align: top; font-size: 14px; line-height: 1.45; }
+.dae-table thead { background: var(--dae-tint-4, #f6f6f6); }
+.dae-table thead th { font-weight: 700; color: var(--dae-primary, #1a1a1a); }
+.dae-table td { color: var(--dae-fg, #1a1a1a); }
+.dae-table-toolbar { display: none; gap: 4px; margin-top: 6px; font-family: ui-sans-serif, system-ui, sans-serif; }
+body.dae-edit-mode .dae-table-block:focus-within > .dae-table-toolbar { display: inline-flex; }
+.dae-table-toolbar button { appearance: none; border: 1.5px solid var(--dae-tint-2, #d8d8d8); background: white; color: var(--dae-secondary, #4a4a4a); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+.dae-table-toolbar button:hover { border-color: var(--dae-accent, #0066cc); color: var(--dae-accent, #0066cc); }
+body.dae-pdf-export-mode .dae-table-toolbar,
+body.dae-present-mode .dae-table-toolbar { display: none !important; }
+@media print { .dae-table-toolbar { display: none !important; } }
+
 /* PDF-export mode — applied by the Save-as-PDF button while html2pdf
    captures the page. Hides all edit-mode chrome the same way @media print
    does, but works for the html2canvas DOM-to-canvas capture too. */
@@ -455,6 +490,103 @@ body.dae-present-mode .dae-sortable-block { resize: none !important; overflow: v
 .dae-present-hint { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(0, 0, 0, 0.70); color: white; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; padding: 8px 16px; border-radius: 999px; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
 .dae-present-hint.show { opacity: 1; }
 
+/* ── Comments ─────────────────────────────────────────────────────────
+   Round-trip review layer. Comments anchor to text via wrapping spans
+   (.dae-comment-anchor[data-comment-id="..."]). Data lives in a hidden
+   <template id="dae-comments-data"> inside the [data-pdf-root] so it
+   survives autosave snapshots and HTML download round-trips. */
+
+.dae-comment-anchor {
+  background: rgba(252, 211, 77, 0.35);
+  border-bottom: 1.5px dotted #f59e0b;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.dae-comment-anchor:hover { background: rgba(252, 211, 77, 0.55); }
+.dae-comment-anchor.resolved { background: transparent; border-bottom-color: rgba(245, 158, 11, 0.2); }
+.dae-comment-anchor.active { background: rgba(252, 211, 77, 0.7); outline: 2px solid #f59e0b; outline-offset: 2px; border-radius: 2px; }
+
+.dae-comments-badge {
+  display: inline-block;
+  background: #f59e0b;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 4px;
+  min-width: 16px;
+  text-align: center;
+}
+.dae-comments-badge:empty,
+.dae-comments-badge[data-count="0"] { display: none; }
+
+.dae-comments-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 360px;
+  z-index: 200;
+  background: white;
+  border-left: 1.5px solid var(--dae-tint-2, #d8d8d8);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.12);
+  display: none;
+  flex-direction: column;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+.dae-comments-panel.open { display: flex; }
+.dae-comments-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1.5px solid var(--dae-tint-2, #d8d8d8); }
+.dae-comments-header h3 { margin: 0; font-size: 15px; font-weight: 700; color: var(--dae-primary, #1a1a1a); letter-spacing: 0.02em; }
+#dae-comments-close { appearance: none; background: transparent; border: 0; cursor: pointer; font-size: 24px; line-height: 1; color: var(--dae-secondary, #4a4a4a); padding: 4px 10px; border-radius: 6px; }
+#dae-comments-close:hover { background: var(--dae-tint-4, #f6f6f6); color: var(--dae-primary, #1a1a1a); }
+
+.dae-comments-list { flex: 1; overflow-y: auto; padding: 16px 16px 32px; }
+.dae-comments-empty { padding: 32px 24px; text-align: center; color: var(--dae-secondary, #4a4a4a); font-size: 13px; line-height: 1.55; }
+.dae-comments-empty p { margin: 0 0 8px; }
+.dae-comments-empty-hint { font-size: 12px; opacity: 0.8; }
+
+.dae-comment-card { background: white; border: 1.5px solid var(--dae-tint-2, #d8d8d8); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; transition: border-color 0.15s; cursor: pointer; }
+.dae-comment-card:hover { border-color: var(--dae-tint-1, #cce0ff); }
+.dae-comment-card.active { border-color: #f59e0b; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15); }
+.dae-comment-card.resolved { opacity: 0.55; background: var(--dae-tint-4, #f6f6f6); }
+
+.dae-comment-anchor-preview { font-size: 11px; color: var(--dae-secondary, #4a4a4a); font-style: italic; padding: 4px 8px; background: rgba(252, 211, 77, 0.18); border-left: 2px solid #f59e0b; border-radius: 2px; margin: 0 0 8px; line-height: 1.4; word-wrap: break-word; }
+.dae-comment-card.resolved .dae-comment-anchor-preview { background: var(--dae-tint-3, #ececec); border-left-color: var(--dae-tint-2, #d8d8d8); }
+
+.dae-comment-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; margin: 0 0 6px; }
+.dae-comment-author { font-weight: 700; color: var(--dae-primary, #1a1a1a); }
+.dae-comment-time { color: var(--dae-secondary, #4a4a4a); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; letter-spacing: 0.02em; }
+
+.dae-comment-body { font-size: 13px; line-height: 1.5; color: var(--dae-fg, #1a1a1a); margin: 0 0 10px; white-space: pre-wrap; word-wrap: break-word; }
+.dae-comment-body:empty::before { content: "(empty)"; color: var(--dae-secondary, #4a4a4a); font-style: italic; }
+
+.dae-comment-actions { display: flex; gap: 6px; }
+.dae-comment-actions button { appearance: none; border: 1px solid var(--dae-tint-2, #d8d8d8); background: transparent; color: var(--dae-secondary, #4a4a4a); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 4px; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+.dae-comment-actions button:hover { border-color: var(--dae-accent, #0066cc); color: var(--dae-accent, #0066cc); }
+.dae-comment-actions button.danger:hover { border-color: var(--dae-warm, #cc3300); color: var(--dae-warm, #cc3300); }
+
+.dae-comment-edit { width: 100%; box-sizing: border-box; border: 1.5px solid var(--dae-tint-2, #d8d8d8); border-radius: 6px; padding: 8px 10px; font-family: inherit; font-size: 13px; line-height: 1.45; color: var(--dae-fg, #1a1a1a); resize: vertical; min-height: 60px; margin: 0 0 8px; outline: none; transition: border-color 0.15s; }
+.dae-comment-edit:focus { border-color: var(--dae-accent, #0066cc); }
+
+.dae-comment-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
+.dae-comment-edit-actions button { appearance: none; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 12px; padding: 6px 14px; border-radius: 6px; border: 1.5px solid transparent; transition: all 0.15s; }
+.dae-comment-edit-actions .post { background: var(--dae-primary, #1a1a1a); color: white; border-color: var(--dae-primary, #1a1a1a); }
+.dae-comment-edit-actions .post:hover { background: var(--dae-accent, #0066cc); border-color: var(--dae-accent, #0066cc); }
+.dae-comment-edit-actions .cancel { background: transparent; color: var(--dae-secondary, #4a4a4a); border-color: var(--dae-tint-2, #d8d8d8); }
+.dae-comment-edit-actions .cancel:hover { color: var(--dae-primary, #1a1a1a); }
+
+/* Hide all comment chrome in PDF / present / print */
+body.dae-pdf-export-mode .dae-comments-panel,
+body.dae-present-mode .dae-comments-panel { display: none !important; }
+body.dae-pdf-export-mode .dae-comment-anchor,
+body.dae-present-mode .dae-comment-anchor { background: transparent !important; border-bottom: 0 !important; }
+@media print {
+  .dae-comments-panel, .dae-comments-badge { display: none !important; }
+  .dae-comment-anchor { background: transparent !important; border-bottom: 0 !important; }
+}
+
 @media print {
   .dae-edit-toolbar, .dae-text-menu, .dae-photo-overlay, .dae-toast, .dae-block-controls, .dae-add-block-btn, .dae-insert-menu, .dae-link-modal, .dae-size-menu, .dae-restore-prompt, .dae-versions-menu, .dae-present-hint { display: none !important; }
   /* Spacer keeps its layout reservation in print (so spacing carries to PDF) but loses the dashed-pattern fill */
@@ -513,6 +645,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     { id: 'paragraph', label: 'Paragraph', icon: '¶', hint: 'body copy' },
     { id: 'pullquote', label: 'Pull quote', icon: '"', hint: 'big number + line' },
     { id: 'callout', label: 'Callout box', icon: '⚡', hint: 'pale teal block' },
+    { id: 'table', label: 'Table', icon: '⊞', hint: '3 × 2 to start' },
     { id: 'photo', label: 'Photo + caption', icon: '◧', hint: 'image + caption' },
     { id: 'spacer', label: 'Spacer', icon: '⇕', hint: 'resizable blank space' },
   ];
@@ -1044,6 +1177,65 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     }
     toast(type.charAt(0).toUpperCase() + type.slice(1) + ' added.');
   }
+
+  // ── Table cell controls (add row/col, delete row/col) ─────────────────
+  // The table template ships with a small `.dae-table-toolbar` whose buttons
+  // each have a `data-table-action="..."` attribute. We delegate clicks at
+  // the document level so the buttons work even on tables added via undo or
+  // restore. Actions operate on whichever cell currently has focus.
+
+  function getActiveTableCell() {
+    const el = document.activeElement;
+    return el && el.closest ? el.closest('td, th') : null;
+  }
+
+  function tableAction(action) {
+    const cell = getActiveTableCell();
+    if (!cell) { toast('Click into a table cell first.'); return; }
+    const table = cell.closest('table');
+    const row = cell.closest('tr');
+    if (!table || !row) return;
+    const colIdx = [...row.children].indexOf(cell);
+
+    if (action === 'row-below') {
+      const newRow = document.createElement('tr');
+      for (let i = 0; i < row.children.length; i++) {
+        const td = document.createElement('td');
+        td.setAttribute('data-editable', '');
+        if (editMode) { td.setAttribute('contenteditable', 'true'); td.setAttribute('spellcheck', 'true'); }
+        newRow.appendChild(td);
+      }
+      row.parentNode.insertBefore(newRow, row.nextSibling);
+      const firstCell = newRow.firstChild;
+      if (firstCell && firstCell.focus) firstCell.focus();
+    } else if (action === 'col-right') {
+      table.querySelectorAll('tr').forEach(tr => {
+        const refCell = tr.children[colIdx];
+        if (!refCell) return;
+        const newCell = document.createElement(refCell.tagName.toLowerCase());
+        newCell.setAttribute('data-editable', '');
+        if (editMode) { newCell.setAttribute('contenteditable', 'true'); newCell.setAttribute('spellcheck', 'true'); }
+        tr.insertBefore(newCell, refCell.nextSibling);
+      });
+    } else if (action === 'del-row') {
+      const allRows = table.querySelectorAll('tr');
+      if (allRows.length <= 1) { toast('Table must have at least one row.'); return; }
+      row.remove();
+    } else if (action === 'del-col') {
+      if (row.children.length <= 1) { toast('Table must have at least one column.'); return; }
+      table.querySelectorAll('tr').forEach(tr => {
+        if (tr.children[colIdx]) tr.children[colIdx].remove();
+      });
+    }
+  }
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest && e.target.closest('[data-table-action]');
+    if (!btn || !editMode) return;
+    e.preventDefault();
+    e.stopPropagation();
+    tableAction(btn.getAttribute('data-table-action'));
+  });
 
   // Text color (themed palette via --dae-color-* CSS variables)
   function applyTextColor(colorNum) {
@@ -1677,6 +1869,10 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
       });
       initSortable();
     }
+    // Restore comments — the snapshot contains the data template inside
+    // [data-pdf-root], so loadCommentsFromTemplate reads the restored state.
+    loadCommentsFromTemplate();
+    renderComments();
     // Use the (sanitized) just-assigned HTML as the new baseline. Avoids
     // a redundant getCleanSnapshot() (cloneNode + serialize) on the tree
     // we literally just installed.
@@ -1817,6 +2013,337 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
   window.addEventListener('beforeunload', () => {
     if (editMode) snapshotNow();
   });
+
+  // ── Comments / annotations layer ────────────────────────────────────────
+  // Round-trip review. Comments anchor to text by wrapping the selection in
+  // a <span class="dae-comment-anchor" data-comment-id="..."> tag. The
+  // comment DATA (body, author, timestamps, resolved) lives in JSON inside
+  // a <template id="dae-comments-data"> appended to [data-pdf-root] so it
+  // survives autosave snapshots and HTML download round-trips.
+  //
+  // Author is prompted on the first comment and persisted to localStorage
+  // (key: dae:author). Resolved comments stay in storage but fade visually.
+  // Orphan comments (anchor span deleted) still appear in the sidebar so
+  // the reviewer can still see what was said even after the text is gone.
+
+  const COMMENTS_DATA_ID = 'dae-comments-data';
+  const AUTHOR_KEY = 'dae:author';
+  let commentsData = { comments: [] };
+  let activeCommentId = null;
+
+  function getAuthor() {
+    try { return localStorage.getItem(AUTHOR_KEY) || ''; } catch (_) { return ''; }
+  }
+  function setAuthor(name) {
+    try { localStorage.setItem(AUTHOR_KEY, name); } catch (_) {}
+  }
+  function ensureAuthor() {
+    let author = getAuthor();
+    if (author) return author;
+    const name = (window.prompt('Your name (used as the author of your comments):') || '').trim();
+    if (!name) return '';
+    setAuthor(name);
+    return name;
+  }
+
+  function ensureCommentsDataNode() {
+    let tpl = $('#' + COMMENTS_DATA_ID);
+    if (tpl) return tpl;
+    const root = findPdfRoot();
+    if (!root) return null;
+    tpl = document.createElement('template');
+    tpl.id = COMMENTS_DATA_ID;
+    tpl.textContent = '{"comments":[]}';
+    root.appendChild(tpl);
+    return tpl;
+  }
+
+  function loadCommentsFromTemplate() {
+    const tpl = $('#' + COMMENTS_DATA_ID);
+    if (!tpl) { commentsData = { comments: [] }; return; }
+    try {
+      const raw = (tpl.textContent || '').trim() || '{}';
+      const parsed = JSON.parse(raw);
+      commentsData = parsed && Array.isArray(parsed.comments) ? parsed : { comments: [] };
+    } catch (_) { commentsData = { comments: [] }; }
+  }
+
+  function saveCommentsToTemplate() {
+    const tpl = ensureCommentsDataNode();
+    if (!tpl) return;
+    tpl.textContent = JSON.stringify(commentsData);
+  }
+
+  function makeCommentId() {
+    return 'cmt-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
+  }
+
+  function findAnchorEl(commentId) {
+    return document.querySelector('.dae-comment-anchor[data-comment-id="' + commentId + '"]');
+  }
+
+  function addCommentFromSelection() {
+    if (!editMode) { toast('Enter edit mode to add comments.'); return; }
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+      toast('Select text first, then click 💬.');
+      return;
+    }
+    const range = sel.getRangeAt(0);
+    const container = range.commonAncestorContainer;
+    const anchor = container.nodeType === 1 ? container : container.parentElement;
+    if (!anchor || !anchor.closest('[data-editable]')) {
+      toast('Comments only work on editable text.');
+      return;
+    }
+    if (anchor.closest('.dae-comment-anchor')) {
+      toast('Selection is already inside a comment.');
+      return;
+    }
+    const author = ensureAuthor();
+    if (!author) return;
+
+    const id = makeCommentId();
+    const span = document.createElement('span');
+    span.className = 'dae-comment-anchor';
+    span.setAttribute('data-comment-id', id);
+    try { range.surroundContents(span); }
+    catch (_) {
+      const fragment = range.extractContents();
+      span.appendChild(fragment);
+      range.insertNode(span);
+    }
+    sel.removeAllRanges();
+
+    commentsData.comments.push({
+      id,
+      anchorText: span.textContent.slice(0, 80),
+      author,
+      ts: Date.now(),
+      body: '',
+      resolved: false,
+      editing: true,
+    });
+    saveCommentsToTemplate();
+    renderComments();
+    openCommentsPanel();
+    setTimeout(() => {
+      const textarea = $('.dae-comment-card[data-comment-id="' + id + '"] .dae-comment-edit');
+      if (textarea) textarea.focus();
+    }, 50);
+  }
+
+  function deleteComment(commentId) {
+    const span = findAnchorEl(commentId);
+    if (span) {
+      while (span.firstChild) span.parentNode.insertBefore(span.firstChild, span);
+      span.remove();
+    }
+    commentsData.comments = commentsData.comments.filter(c => c.id !== commentId);
+    saveCommentsToTemplate();
+    renderComments();
+  }
+
+  function resolveComment(commentId, resolved) {
+    const c = commentsData.comments.find(x => x.id === commentId);
+    if (!c) return;
+    c.resolved = resolved;
+    const span = findAnchorEl(commentId);
+    if (span) span.classList.toggle('resolved', resolved);
+    saveCommentsToTemplate();
+    renderComments();
+  }
+
+  function updateCommentBody(commentId, body) {
+    const c = commentsData.comments.find(x => x.id === commentId);
+    if (!c) return;
+    c.body = body;
+    c.editing = false;
+    saveCommentsToTemplate();
+    renderComments();
+  }
+
+  function focusComment(commentId) {
+    activeCommentId = commentId;
+    document.querySelectorAll('.dae-comment-anchor.active').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.dae-comment-card.active').forEach(el => el.classList.remove('active'));
+    const span = findAnchorEl(commentId);
+    if (span) span.classList.add('active');
+    const card = document.querySelector('.dae-comment-card[data-comment-id="' + commentId + '"]');
+    if (card) {
+      card.classList.add('active');
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  function syncAnchorClasses() {
+    for (const c of commentsData.comments) {
+      const span = findAnchorEl(c.id);
+      if (span) span.classList.toggle('resolved', !!c.resolved);
+    }
+  }
+
+  function renderComments() {
+    const list = $('#dae-comments-list');
+    const empty = $('#dae-comments-empty');
+    const badge = $('#dae-comments-badge');
+    if (!list || !empty || !badge) return;
+
+    const unresolvedCount = commentsData.comments.filter(c => !c.resolved).length;
+    badge.textContent = unresolvedCount > 0 ? String(unresolvedCount) : '';
+    badge.setAttribute('data-count', String(unresolvedCount));
+
+    if (commentsData.comments.length === 0) {
+      empty.style.display = 'block';
+      list.replaceChildren();
+      return;
+    }
+    empty.style.display = 'none';
+
+    const sorted = [...commentsData.comments].sort((a, b) => b.ts - a.ts);
+    list.replaceChildren();
+    for (const c of sorted) {
+      list.appendChild(renderCommentCard(c));
+    }
+    syncAnchorClasses();
+  }
+
+  function renderCommentCard(c) {
+    const card = document.createElement('div');
+    card.className = 'dae-comment-card' + (c.resolved ? ' resolved' : '') + (c.id === activeCommentId ? ' active' : '');
+    card.setAttribute('data-comment-id', c.id);
+
+    const orphan = !findAnchorEl(c.id);
+    const preview = document.createElement('p');
+    preview.className = 'dae-comment-anchor-preview';
+    preview.textContent = orphan ? '(anchor deleted) ' + (c.anchorText || '') : (c.anchorText || '');
+    card.appendChild(preview);
+
+    const meta = document.createElement('div');
+    meta.className = 'dae-comment-meta';
+    const authorEl = document.createElement('span');
+    authorEl.className = 'dae-comment-author';
+    authorEl.textContent = c.author || 'Anonymous';
+    const tsEl = document.createElement('span');
+    tsEl.className = 'dae-comment-time';
+    tsEl.textContent = new Date(c.ts).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    meta.appendChild(authorEl);
+    meta.appendChild(tsEl);
+    card.appendChild(meta);
+
+    if (c.editing) {
+      const ta = document.createElement('textarea');
+      ta.className = 'dae-comment-edit';
+      ta.placeholder = 'Type your comment...';
+      ta.value = c.body || '';
+      card.appendChild(ta);
+
+      const actions = document.createElement('div');
+      actions.className = 'dae-comment-edit-actions';
+      const cancel = document.createElement('button');
+      cancel.className = 'cancel';
+      cancel.type = 'button';
+      cancel.textContent = c.body ? 'Cancel' : 'Discard';
+      cancel.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!c.body) { deleteComment(c.id); }
+        else { c.editing = false; saveCommentsToTemplate(); renderComments(); }
+      });
+      const post = document.createElement('button');
+      post.className = 'post';
+      post.type = 'button';
+      post.textContent = 'Post';
+      post.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const body = ta.value.trim();
+        if (!body) { ta.focus(); return; }
+        updateCommentBody(c.id, body);
+      });
+      actions.appendChild(cancel);
+      actions.appendChild(post);
+      card.appendChild(actions);
+    } else {
+      const body = document.createElement('div');
+      body.className = 'dae-comment-body';
+      body.textContent = c.body;
+      card.appendChild(body);
+
+      const actions = document.createElement('div');
+      actions.className = 'dae-comment-actions';
+      const resolveBtn = document.createElement('button');
+      resolveBtn.type = 'button';
+      resolveBtn.textContent = c.resolved ? 'Reopen' : 'Resolve';
+      resolveBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        resolveComment(c.id, !c.resolved);
+      });
+      const editBtn = document.createElement('button');
+      editBtn.type = 'button';
+      editBtn.textContent = 'Edit';
+      editBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        c.editing = true;
+        saveCommentsToTemplate();
+        renderComments();
+      });
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'danger';
+      delBtn.textContent = 'Delete';
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.confirm('Delete this comment?')) deleteComment(c.id);
+      });
+      actions.appendChild(resolveBtn);
+      actions.appendChild(editBtn);
+      actions.appendChild(delBtn);
+      card.appendChild(actions);
+    }
+
+    card.addEventListener('click', () => focusComment(c.id));
+    return card;
+  }
+
+  const commentsPanel = $('#dae-comments-panel');
+  const commentsToggleBtn = $('#dae-comments-toggle');
+  const commentsCloseBtn = $('#dae-comments-close');
+
+  function openCommentsPanel() {
+    if (!commentsPanel) return;
+    commentsPanel.classList.add('open');
+    commentsPanel.setAttribute('aria-hidden', 'false');
+  }
+  function closeCommentsPanel() {
+    if (!commentsPanel) return;
+    commentsPanel.classList.remove('open');
+    commentsPanel.setAttribute('aria-hidden', 'true');
+  }
+  function toggleCommentsPanel() {
+    if (commentsPanel.classList.contains('open')) closeCommentsPanel();
+    else openCommentsPanel();
+  }
+
+  if (commentsToggleBtn) commentsToggleBtn.addEventListener('click', toggleCommentsPanel);
+  if (commentsCloseBtn) commentsCloseBtn.addEventListener('click', closeCommentsPanel);
+
+  document.addEventListener('click', (e) => {
+    const span = e.target.closest && e.target.closest('.dae-comment-anchor');
+    if (!span) return;
+    const id = span.getAttribute('data-comment-id');
+    if (!id) return;
+    openCommentsPanel();
+    focusComment(id);
+  });
+
+  const commentBtn = $('#dae-tm-comment');
+  if (commentBtn) {
+    commentBtn.addEventListener('mousedown', (e) => e.preventDefault());
+    commentBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      addCommentFromSelection();
+    });
+  }
 
   // ── Present mode — fullscreen viewer, all chrome hidden ─────────────────
   // Click Present → exits edit mode (clean view, no contenteditable cursor) →
@@ -2065,7 +2592,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
 
     const clone = document.documentElement.cloneNode(true);
     clone.querySelectorAll(
-      '.dae-edit-toolbar, #dae-photo-input, .dae-toast, .dae-link-modal, .dae-size-menu, .dae-photo-overlay, .dae-block-controls, .dae-add-block-btn, .dae-insert-menu, template'
+      '.dae-edit-toolbar, .dae-comments-panel, #dae-photo-input, .dae-toast, .dae-link-modal, .dae-size-menu, .dae-photo-overlay, .dae-block-controls, .dae-add-block-btn, .dae-insert-menu, template:not(#dae-comments-data)'
     ).forEach(el => el.remove());
     const cloneBody = clone.querySelector('body');
     if (cloneBody) cloneBody.classList.remove('dae-edit-mode');
@@ -2125,6 +2652,8 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
   refreshPhotoOverlays();
   refreshVersionsButtonState();
   checkForRestoreOnLoad();
+  loadCommentsFromTemplate();
+  renderComments();
 })();
 ```
 

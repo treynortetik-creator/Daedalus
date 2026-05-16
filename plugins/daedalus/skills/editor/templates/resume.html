@@ -1,0 +1,186 @@
+<!doctype html>
+<!--
+  Daedalus template: resume
+  =========================
+  Single-page CV. Name + contact + summary + experience timeline + skills
+  + education. Letter portrait, clean editorial layout.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{FULL_NAME}} — Resume</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+@page { size: Letter portrait; margin: 0.5in; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #f0f0f0; }
+body { font-family: ui-sans-serif, system-ui, sans-serif; color: var(--dae-fg); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+.resume { max-width: 7.5in; margin: 0.5in auto; padding: 0.5in; background: var(--dae-bg); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+.cv-header { text-align: center; margin-bottom: 0.35in; padding-bottom: 0.2in; border-bottom: 2px solid var(--dae-primary); }
+.cv-name { font-size: 32px; font-weight: 800; color: var(--dae-primary); margin: 0 0 0.06in; letter-spacing: -0.02em; }
+.cv-title { font-size: 14px; color: var(--dae-accent); margin: 0 0 0.12in; font-weight: 500; letter-spacing: 0.04em; }
+.cv-contact { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-secondary); letter-spacing: 0.04em; }
+
+.cv-section { margin-bottom: 0.3in; }
+.cv-section h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dae-secondary); margin: 0 0 0.12in; padding-bottom: 6px; border-bottom: 1px solid var(--dae-tint-2); }
+.cv-section p { font-size: 13px; line-height: 1.55; color: var(--dae-primary); margin: 0 0 8px; }
+
+.cv-summary p { font-size: 13.5px; line-height: 1.6; color: var(--dae-fg); margin: 0; }
+
+.cv-job { margin-bottom: 0.2in; page-break-inside: avoid; }
+.cv-job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 4px; }
+.cv-job-title { font-size: 14px; font-weight: 700; color: var(--dae-primary); margin: 0; }
+.cv-job-when { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-secondary); white-space: nowrap; }
+.cv-job-company { font-size: 13px; color: var(--dae-secondary); margin: 0 0 6px; font-style: italic; }
+.cv-job ul { margin: 0; padding-left: 18px; }
+.cv-job li { font-size: 12.5px; line-height: 1.55; color: var(--dae-fg); margin-bottom: 4px; }
+
+.skill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 24px; }
+.skill-group h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dae-accent); margin: 0 0 6px; }
+.skill-group p { font-size: 12.5px; color: var(--dae-fg); margin: 0; line-height: 1.5; }
+
+.cv-edu { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 6px 0; border-bottom: 1px dashed var(--dae-tint-2); font-size: 13px; }
+.cv-edu:last-child { border-bottom: 0; }
+.cv-edu .school { font-weight: 700; color: var(--dae-primary); }
+.cv-edu .degree { color: var(--dae-secondary); }
+.cv-edu .year { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-secondary); }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+@media print {
+  html, body { background: white !important; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .resume { box-shadow: none; margin: 0; padding: 0; max-width: none; }
+  .cv-job, .cv-section { page-break-inside: avoid; }
+}
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="resume dae-sortable-container" data-pdf-root>
+
+  <header class="cv-header">
+    <h1 class="cv-name" data-editable>{{FULL_NAME}}</h1>
+    <p class="cv-title" data-editable>{{HEADLINE_TITLE}}</p>
+    <div class="cv-contact">
+      <span data-editable>{{LOCATION}}</span>
+      <span data-editable>{{EMAIL}}</span>
+      <span data-editable>{{PHONE}}</span>
+      <span data-editable>{{WEBSITE}}</span>
+    </div>
+  </header>
+
+  <section class="cv-section cv-summary">
+    <h2>Summary</h2>
+    <p data-editable>{{SUMMARY}}</p>
+  </section>
+
+  <section class="cv-section">
+    <h2>Experience</h2>
+    <div class="dae-sortable-container">
+
+      <div class="cv-job">
+        <div class="cv-job-head">
+          <h3 class="cv-job-title" data-editable>{{JOB_1_TITLE}}</h3>
+          <span class="cv-job-when" data-editable>{{JOB_1_DATES}}</span>
+        </div>
+        <p class="cv-job-company" data-editable>{{JOB_1_COMPANY}}</p>
+        <ul>
+          <li data-editable>{{JOB_1_BULLET_1}}</li>
+          <li data-editable>{{JOB_1_BULLET_2}}</li>
+          <li data-editable>{{JOB_1_BULLET_3}}</li>
+        </ul>
+      </div>
+
+      <div class="cv-job">
+        <div class="cv-job-head">
+          <h3 class="cv-job-title" data-editable>{{JOB_2_TITLE}}</h3>
+          <span class="cv-job-when" data-editable>{{JOB_2_DATES}}</span>
+        </div>
+        <p class="cv-job-company" data-editable>{{JOB_2_COMPANY}}</p>
+        <ul>
+          <li data-editable>{{JOB_2_BULLET_1}}</li>
+          <li data-editable>{{JOB_2_BULLET_2}}</li>
+        </ul>
+      </div>
+
+      <div class="cv-job">
+        <div class="cv-job-head">
+          <h3 class="cv-job-title" data-editable>{{JOB_3_TITLE}}</h3>
+          <span class="cv-job-when" data-editable>{{JOB_3_DATES}}</span>
+        </div>
+        <p class="cv-job-company" data-editable>{{JOB_3_COMPANY}}</p>
+        <ul>
+          <li data-editable>{{JOB_3_BULLET_1}}</li>
+          <li data-editable>{{JOB_3_BULLET_2}}</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cv-section">
+    <h2>Skills</h2>
+    <div class="skill-grid">
+      <div class="skill-group">
+        <h3 data-editable>{{SKILL_GROUP_1}}</h3>
+        <p data-editable>{{SKILL_LIST_1}}</p>
+      </div>
+      <div class="skill-group">
+        <h3 data-editable>{{SKILL_GROUP_2}}</h3>
+        <p data-editable>{{SKILL_LIST_2}}</p>
+      </div>
+      <div class="skill-group">
+        <h3 data-editable>{{SKILL_GROUP_3}}</h3>
+        <p data-editable>{{SKILL_LIST_3}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cv-section">
+    <h2>Education</h2>
+    <div class="dae-sortable-container">
+      <div class="cv-edu">
+        <span class="school" data-editable>{{EDU_1_SCHOOL}}</span>
+        <span class="degree" data-editable>{{EDU_1_DEGREE}}</span>
+        <span class="year" data-editable>{{EDU_1_YEAR}}</span>
+      </div>
+    </div>
+  </section>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

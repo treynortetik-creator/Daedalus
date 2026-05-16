@@ -1,0 +1,145 @@
+<!doctype html>
+<!--
+  Daedalus template: recipe
+  =========================
+  Recipe card. Hero photo + meta (servings/time/difficulty) + ingredients
+  list + numbered steps + notes. The fun template.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{RECIPE_NAME}}</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--dae-tint-4); }
+body { font-family: ui-sans-serif, system-ui, sans-serif; color: var(--dae-fg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+
+.recipe { max-width: 720px; margin: 32px auto; padding: 0; background: var(--dae-bg); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.10); }
+
+.recipe-hero { width: 100%; height: 320px; object-fit: cover; display: block; }
+
+.recipe-body { padding: 32px 40px; }
+.recipe-tag { font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dae-warm); margin: 0 0 8px; }
+.recipe-name { font-size: 36px; font-weight: 800; color: var(--dae-primary); margin: 0 0 8px; line-height: 1.1; letter-spacing: -0.02em; }
+.recipe-tagline { font-size: 15px; color: var(--dae-secondary); margin: 0 0 24px; font-style: italic; }
+
+.recipe-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 16px 0; border-top: 2px solid var(--dae-primary); border-bottom: 2px solid var(--dae-primary); margin-bottom: 28px; }
+.recipe-meta .cell { text-align: center; }
+.recipe-meta .label { font-family: ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dae-secondary); margin: 0 0 4px; }
+.recipe-meta .value { font-size: 16px; font-weight: 700; color: var(--dae-primary); margin: 0; }
+
+.recipe-cols { display: grid; grid-template-columns: 1fr 1.5fr; gap: 32px; margin-bottom: 28px; }
+.recipe-ingredients h2, .recipe-steps h2 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.10em; color: var(--dae-accent); margin: 0 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--dae-tint-2); }
+.recipe-ingredients ul { list-style: none; padding: 0; margin: 0; }
+.recipe-ingredients li { padding: 6px 0; font-size: 13.5px; border-bottom: 1px dashed var(--dae-tint-3); color: var(--dae-fg); }
+.recipe-ingredients li:last-child { border-bottom: 0; }
+.recipe-steps ol { padding-left: 0; margin: 0; list-style: none; counter-reset: step; }
+.recipe-steps li { counter-increment: step; padding: 0 0 14px 36px; position: relative; font-size: 14px; line-height: 1.6; color: var(--dae-fg); }
+.recipe-steps li::before { content: counter(step); position: absolute; left: 0; top: -2px; width: 26px; height: 26px; background: var(--dae-primary); color: white; font-family: ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border-radius: 999px; }
+
+.recipe-notes { background: var(--dae-tint-4); border-left: 4px solid var(--dae-warm); padding: 14px 18px; border-radius: 4px; }
+.recipe-notes h3 { font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dae-warm); margin: 0 0 6px; }
+.recipe-notes p { font-size: 13px; line-height: 1.55; color: var(--dae-primary); margin: 0; font-style: italic; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="recipe dae-sortable-container" data-pdf-root>
+
+  <span class="dae-photo-wrap">
+    <img src="{{HERO_PHOTO_BASE64}}" alt="{{RECIPE_NAME}}" class="recipe-hero" data-editable-photo>
+  </span>
+
+  <div class="recipe-body">
+
+    <p class="recipe-tag" data-editable>{{TAG_LINE}}</p>
+    <h1 class="recipe-name" data-editable>{{RECIPE_NAME}}</h1>
+    <p class="recipe-tagline" data-editable>{{TAGLINE}}</p>
+
+    <div class="recipe-meta">
+      <div class="cell">
+        <p class="label">Serves</p>
+        <p class="value" data-editable>{{SERVINGS}}</p>
+      </div>
+      <div class="cell">
+        <p class="label">Prep</p>
+        <p class="value" data-editable>{{PREP_TIME}}</p>
+      </div>
+      <div class="cell">
+        <p class="label">Cook</p>
+        <p class="value" data-editable>{{COOK_TIME}}</p>
+      </div>
+      <div class="cell">
+        <p class="label">Difficulty</p>
+        <p class="value" data-editable>{{DIFFICULTY}}</p>
+      </div>
+    </div>
+
+    <div class="recipe-cols">
+      <div class="recipe-ingredients">
+        <h2>Ingredients</h2>
+        <ul class="dae-sortable-container">
+          <li data-editable>{{INGREDIENT_1}}</li>
+          <li data-editable>{{INGREDIENT_2}}</li>
+          <li data-editable>{{INGREDIENT_3}}</li>
+          <li data-editable>{{INGREDIENT_4}}</li>
+          <li data-editable>{{INGREDIENT_5}}</li>
+          <li data-editable>{{INGREDIENT_6}}</li>
+        </ul>
+      </div>
+      <div class="recipe-steps">
+        <h2>Method</h2>
+        <ol class="dae-sortable-container">
+          <li data-editable>{{STEP_1}}</li>
+          <li data-editable>{{STEP_2}}</li>
+          <li data-editable>{{STEP_3}}</li>
+          <li data-editable>{{STEP_4}}</li>
+          <li data-editable>{{STEP_5}}</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="recipe-notes">
+      <h3>Notes</h3>
+      <p data-editable>{{NOTES}}</p>
+    </div>
+
+  </div>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

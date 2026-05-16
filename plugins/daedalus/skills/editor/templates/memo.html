@@ -1,0 +1,112 @@
+<!doctype html>
+<!--
+  Daedalus template: memo
+  =======================
+  Classic business memo — FROM / TO / RE / DATE header + numbered sections.
+  Tight, formal, no chrome. Good for short internal communications.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memo — {{RE_LINE}}</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+@page { size: Letter portrait; margin: 0.75in; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #f0f0f0; }
+body { font-family: Georgia, "Times New Roman", serif; color: var(--dae-fg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+.memo { max-width: 7in; margin: 0.75in auto; padding: 0.75in; background: var(--dae-bg); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+.memo-banner { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 28px; font-weight: 800; letter-spacing: 0.20em; color: var(--dae-primary); text-transform: uppercase; margin: 0 0 0.3in; padding-bottom: 0.15in; border-bottom: 3px double var(--dae-primary); }
+
+.memo-meta { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; margin-bottom: 0.3in; }
+.memo-meta dl { display: grid; grid-template-columns: 70px 1fr; gap: 6px 12px; margin: 0; }
+.memo-meta dt { font-weight: 700; color: var(--dae-secondary); text-transform: uppercase; letter-spacing: 0.04em; font-size: 11px; padding-top: 2px; }
+.memo-meta dd { margin: 0; color: var(--dae-primary); }
+.memo-meta .re { font-weight: 700; }
+
+.memo-body { font-size: 14px; }
+.memo-body h2 { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 700; color: var(--dae-primary); margin: 24px 0 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+.memo-body h2::before { content: counter(memo-section) ". "; counter-increment: memo-section; color: var(--dae-secondary); }
+.memo-body { counter-reset: memo-section; }
+.memo-body p { margin: 0 0 14px; line-height: 1.65; }
+
+.memo-sign { margin-top: 0.4in; padding-top: 0.2in; border-top: 1px solid var(--dae-tint-2); font-family: ui-sans-serif, system-ui, sans-serif; font-size: 12px; color: var(--dae-secondary); display: flex; justify-content: space-between; gap: 16px; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+@media print {
+  html, body { background: white !important; }
+  .memo { box-shadow: none; margin: 0; padding: 0; max-width: none; }
+}
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="memo dae-sortable-container" data-pdf-root>
+
+  <h1 class="memo-banner">Memorandum</h1>
+
+  <div class="memo-meta">
+    <dl>
+      <dt>To:</dt><dd data-editable>{{TO_LINE}}</dd>
+      <dt>From:</dt><dd data-editable>{{FROM_LINE}}</dd>
+      <dt>Date:</dt><dd data-editable>{{DATE_LINE}}</dd>
+      <dt>Re:</dt><dd class="re" data-editable>{{RE_LINE}}</dd>
+      <dt>CC:</dt><dd data-editable>{{CC_LINE}}</dd>
+    </dl>
+  </div>
+
+  <div class="memo-body dae-sortable-container">
+    <p data-editable>{{LEDE}}</p>
+
+    <h2 data-editable>{{SECTION_1_HEADING}}</h2>
+    <p data-editable>{{SECTION_1_BODY}}</p>
+
+    <h2 data-editable>{{SECTION_2_HEADING}}</h2>
+    <p data-editable>{{SECTION_2_BODY}}</p>
+
+    <h2 data-editable>{{SECTION_3_HEADING}}</h2>
+    <p data-editable>{{SECTION_3_BODY}}</p>
+  </div>
+
+  <div class="memo-sign">
+    <span data-editable>{{SIGN_OFF}}</span>
+    <span data-editable>{{FILE_REF}}</span>
+  </div>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

@@ -21,7 +21,7 @@ No app. No install. No build step. No server. Works offline. One self-contained 
 | | |
 |---|---|
 | [`dist/editor.html`](dist/) | **Standalone single-file bundle** (~692 KB). Copy it, drop your content inside the `<article data-pdf-root>`, open in a browser. Zero install, no Claude needed. |
-| [`plugins/daedalus/skills/editor/templates/`](plugins/daedalus/skills/editor/templates/) | **8 starter templates** — blank, onepager, landing, blog post, status report, pricing table, case study, event invitation. |
+| [`plugins/daedalus/skills/editor/templates/`](plugins/daedalus/skills/editor/templates/) | **13 starter templates** — blank, blog post, case study, changelog, dashboard, invitation, landing page, memo, onepager, pricing table, recipe, resume, status report. The plugin auto-picks based on your request. |
 | [`plugins/daedalus/skills/editor/themes/`](plugins/daedalus/skills/editor/themes/) | **4 theme presets** — Greek/sepia, dark mode, minimal, brutalist. Copy-paste CSS overrides. |
 | [`plugins/daedalus/skills/editor/references/editor.md`](plugins/daedalus/skills/editor/references/editor.md) | **The canonical editor reference** — toolbar HTML/CSS/JS as inline-able code blocks + the markup contract + design rationale. ~2,200 lines. |
 | [`plugins/daedalus/`](plugins/daedalus/) | **Claude Code plugin** — invoke `/daedalus` and Claude scaffolds an artifact for you with the editor baked in. |
@@ -40,7 +40,7 @@ Then in any conversation:
 /daedalus
 ```
 
-Claude will ask what kind of page (one-pager, landing, blank) and what it's about, then generate the file at `~/Downloads/[topic].html`. Open it in any browser.
+Claude will infer the page type from your request ("a one-pager about X", "a blog post on Y", "weekly status report for Z" → matches `onepager` / `blog-post` / `status-report` templates respectively) and skip questions it can answer from the brief. Output saves to `~/Downloads/[topic].html`. Open in any browser.
 
 ## Use without Claude Code
 
@@ -65,7 +65,9 @@ That's the whole contract. Full details in [editor.md](plugins/daedalus/skills/e
 | | |
 |---|---|
 | **Edit** | Toggles edit mode. Editable regions get a dashed outline; click to type. |
-| **Floating format menu** | Pops above any text selection (Medium / Notion style). B / I / U, 4 color swatches, 5 preset font sizes, link insert/edit. Standard shortcuts: Cmd+B/I/U/K. |
+| **Floating format menu** | Pops above any text selection (Medium / Notion style). B / I / U, 4 color swatches, 5 preset font sizes, link insert, comment. Standard shortcuts: Cmd+B/I/U/K. |
+| **Comments / annotations** | Select text → click 💬 in the floating menu → sticky note appears in the right sidebar. Author prompted once + persisted. Resolve, reopen, edit, delete. Round-trips through HTML download via an inert `<template>` so reviewers can keep iterating offline. |
+| **Tables** | Insert menu → Table. Click into any cell → tiny `+ Row / + Col / − Row / − Col` toolbar appears below. No row limits. |
 | **Photo replace** | Hover any `data-editable-photo` → "Replace photo" → file picker → auto-compressed to 2048px wide. |
 | **Photo reposition** | Hover → "Reposition" → drag to shift `object-position`. Esc to lock. |
 | **Photo resize** | Inline photos get Full / Half / Third buttons. Hero photos stay layout-locked. |

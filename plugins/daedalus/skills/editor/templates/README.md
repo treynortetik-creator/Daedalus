@@ -5,13 +5,18 @@ Starting scaffolds for common page types. Each template has the markup contract 
 | Template | Layout | Good for |
 |---|---|---|
 | `blank.html` | One title + one paragraph in a card | Throwaway scaffolds, design-from-scratch |
-| `onepager.html` | Letter portrait: hero + 3-tile proof + CTA | Product overviews, sales handouts, exec summaries |
-| `landing.html` | Hero + 2×2 features grid + CTA strip | Product launches, campaign pages, microsites |
 | `blog-post.html` | Long-form article: byline + hero + body sections + pullquotes + callout | Essays, blog posts, explainers |
-| `status-report.html` | Multi-section: exec summary + RAG status grid + milestones + risks + next steps | Weekly/monthly project updates, exec briefings |
-| `pricing-table.html` | 3-tier comparison columns with feature checkmarks, middle tier highlighted | SaaS pricing, service tiers, sponsorship packages |
 | `case-study.html` | Customer + before/after metrics + pull quote + CTA | Sales case studies, partner outreach |
+| `changelog.html` | Version history with categorized changes (Added/Changed/Fixed/Removed) | Release notes, product changelogs |
+| `dashboard.html` | KPI grid (4-up) + narrative commentary + trend snapshot | Weekly metrics rollups, OKR check-ins, exec dashboards |
 | `invitation.html` | Event card: big date, location, agenda, RSVP button | Event invites, save-the-dates, launch announcements |
+| `landing.html` | Hero + 2×2 features grid + CTA strip | Product launches, campaign pages, microsites |
+| `memo.html` | Formal memo: TO/FROM/RE/DATE header + numbered serif sections | Internal communications, formal notices |
+| `onepager.html` | Letter portrait: hero + 3-tile proof + CTA | Product overviews, sales handouts, exec summaries |
+| `pricing-table.html` | 3-tier comparison columns with feature checkmarks, middle tier highlighted | SaaS pricing, service tiers, sponsorship packages |
+| `recipe.html` | Recipe card: hero photo + meta + ingredients column + numbered steps + notes | Recipes (yes, real recipes), workshop agendas, instructional cards |
+| `resume.html` | Single-page CV: name + contact + summary + experience + skills + education | Resumes, professional bios |
+| `status-report.html` | Multi-section: exec summary + RAG status grid + milestones + risks + next steps | Weekly/monthly project updates, exec briefings |
 
 ## How to use a template
 

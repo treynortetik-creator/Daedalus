@@ -1,0 +1,136 @@
+<!doctype html>
+<!--
+  Daedalus template: dashboard
+  ============================
+  KPI grid + narrative commentary + trend snapshot. Good for weekly
+  metrics roll-ups, exec dashboards, OKR check-ins.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{DASHBOARD_TITLE}}</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+  --good: #16a34a;
+  --bad: #dc2626;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--dae-tint-4); }
+body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: var(--dae-fg); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+.dash { max-width: 1100px; margin: 0 auto; padding: 48px 32px; }
+
+.dash-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 2px solid var(--dae-primary); }
+.dash-header h1 { font-size: 28px; font-weight: 800; color: var(--dae-primary); margin: 0; letter-spacing: -0.02em; }
+.dash-header .period { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--dae-secondary); letter-spacing: 0.08em; text-transform: uppercase; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.kpi { background: var(--dae-bg); border: 1.5px solid var(--dae-tint-2); border-radius: 10px; padding: 20px; }
+.kpi.featured { background: var(--dae-primary); border-color: var(--dae-primary); }
+.kpi.featured .kpi-label, .kpi.featured .kpi-value, .kpi.featured .kpi-delta { color: white; }
+.kpi-label { font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.10em; color: var(--dae-secondary); margin: 0 0 12px; }
+.kpi-value { font-size: 36px; font-weight: 800; color: var(--dae-primary); line-height: 1; letter-spacing: -0.02em; margin: 0 0 8px; }
+.kpi-delta { font-family: ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 600; margin: 0; }
+.kpi-delta.up { color: var(--good); }
+.kpi-delta.down { color: var(--bad); }
+.kpi.featured .kpi-delta.up { color: #86efac; }
+.kpi.featured .kpi-delta.down { color: #fca5a5; }
+
+.dash-section { background: var(--dae-bg); border: 1.5px solid var(--dae-tint-2); border-radius: 10px; padding: 24px 28px; margin-bottom: 16px; }
+.dash-section h2 { font-size: 16px; font-weight: 700; color: var(--dae-primary); margin: 0 0 12px; }
+.dash-section p { font-size: 14px; line-height: 1.6; color: var(--dae-primary); margin: 0 0 10px; }
+
+.trend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.trend { background: var(--dae-bg); border: 1.5px solid var(--dae-tint-2); border-radius: 10px; padding: 20px; }
+.trend h3 { font-size: 14px; font-weight: 700; color: var(--dae-primary); margin: 0 0 8px; }
+.trend p { font-size: 13px; line-height: 1.55; color: var(--dae-secondary); margin: 0; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<div class="dash dae-sortable-container" data-pdf-root>
+
+  <header class="dash-header">
+    <h1 data-editable>{{DASHBOARD_TITLE}}</h1>
+    <span class="period" data-editable>{{PERIOD}}</span>
+  </header>
+
+  <div class="kpi-grid dae-sortable-container">
+    <div class="kpi">
+      <p class="kpi-label" data-editable>{{KPI_1_LABEL}}</p>
+      <p class="kpi-value" data-editable>{{KPI_1_VALUE}}</p>
+      <p class="kpi-delta up" data-editable>{{KPI_1_DELTA}}</p>
+    </div>
+    <div class="kpi featured">
+      <p class="kpi-label" data-editable>{{KPI_2_LABEL}}</p>
+      <p class="kpi-value" data-editable>{{KPI_2_VALUE}}</p>
+      <p class="kpi-delta up" data-editable>{{KPI_2_DELTA}}</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label" data-editable>{{KPI_3_LABEL}}</p>
+      <p class="kpi-value" data-editable>{{KPI_3_VALUE}}</p>
+      <p class="kpi-delta down" data-editable>{{KPI_3_DELTA}}</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label" data-editable>{{KPI_4_LABEL}}</p>
+      <p class="kpi-value" data-editable>{{KPI_4_VALUE}}</p>
+      <p class="kpi-delta up" data-editable>{{KPI_4_DELTA}}</p>
+    </div>
+  </div>
+
+  <section class="dash-section">
+    <h2 data-editable>What's working</h2>
+    <p data-editable>{{WORKING_BODY}}</p>
+  </section>
+
+  <section class="dash-section">
+    <h2 data-editable>What's not</h2>
+    <p data-editable>{{NOT_WORKING_BODY}}</p>
+  </section>
+
+  <div class="trend-grid dae-sortable-container">
+    <div class="trend">
+      <h3 data-editable>{{TREND_1_TITLE}}</h3>
+      <p data-editable>{{TREND_1_BODY}}</p>
+    </div>
+    <div class="trend">
+      <h3 data-editable>{{TREND_2_TITLE}}</h3>
+      <p data-editable>{{TREND_2_BODY}}</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

@@ -25,17 +25,27 @@ Skip for: throwaway scratch pages, dev-targeted scripts, or anything that doesn'
 
 1. **Read `references/editor.md`** — that's the full reference. It contains the toolbar's HTML, CSS, and JS code blocks (copy them verbatim into your artifact), the markup contract for editable regions and photos, the theming hooks, and design rationale.
 
-2. **Pick a starting template** from `templates/` (see `templates/README.md` for the gallery):
-   - `blank.html` — minimal scaffold, you fill in everything
-   - `onepager.html` — letter portrait: hero + 3-tile proof + CTA
-   - `landing.html` — hero + 2×2 features grid + CTA strip
-   - `blog-post.html` — long-form: byline + hero + body sections + pullquotes + callout
-   - `status-report.html` — exec summary + RAG status grid + milestones + risks + next steps
-   - `pricing-table.html` — 3-tier comparison columns with feature checkmarks
-   - `case-study.html` — customer + before/after metrics + pull quote + CTA
-   - `invitation.html` — event card: big date, location, agenda, RSVP
+2. **Pick a starting template** based on the user's request — do NOT ask if the match is clear. Use this lookup:
 
-   If none fit, copy `blank.html` and design from scratch — the markup contract is the same.
+   | User mentions / wants | Use template |
+   |---|---|
+   | "blog post", "article", "essay", "writeup", "explainer" | `blog-post.html` |
+   | "case study", "customer story", "success story" | `case-study.html` |
+   | "changelog", "release notes", "version history", "what's new" | `changelog.html` |
+   | "dashboard", "KPI", "metrics", "OKR check-in", "weekly numbers" | `dashboard.html` |
+   | "invite", "event", "save the date", "RSVP", "launch party" | `invitation.html` |
+   | "landing page", "product page", "microsite", "campaign page" | `landing.html` |
+   | "memo", "business memo", "internal memo" | `memo.html` |
+   | "one-pager", "summary", "exec brief", "overview", "product brief" | `onepager.html` |
+   | "pricing", "tiers", "plans", "sponsorship packages" | `pricing-table.html` |
+   | "recipe" | `recipe.html` |
+   | "resume", "CV", "experience" | `resume.html` |
+   | "status report", "weekly update", "project update", "standup notes" | `status-report.html` |
+   | something else / unclear | `blank.html` (minimal scaffold, you design from scratch) |
+
+   If two templates could fit (e.g. "sales pricing one-pager" → onepager OR pricing-table), pick the one with the stronger structural match for the request and mention the alternative in one line so the user can redirect.
+
+   Full gallery in `templates/README.md`.
 
 3. **Replace the `<!-- DAE_* -->` markers** in the template by inlining the corresponding block from `references/editor.md`:
    - `<!-- DAE_EDIT_TOOLBAR_HERE -->` → the toolbar HTML block

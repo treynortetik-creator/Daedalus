@@ -1,0 +1,151 @@
+<!doctype html>
+<!--
+  Daedalus template: changelog
+  ============================
+  Version history with categorized changes (Added / Changed / Fixed /
+  Removed). Pinned latest at top. Good for product release notes.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PRODUCT_NAME}} — Changelog</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+  --added: #16a34a;
+  --changed: #0066cc;
+  --fixed: #d97706;
+  --removed: #dc2626;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--dae-bg); }
+body { font-family: ui-sans-serif, system-ui, sans-serif; color: var(--dae-fg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+.cl { max-width: 760px; margin: 0 auto; padding: 64px 32px; }
+
+.cl-header { padding-bottom: 32px; border-bottom: 2px solid var(--dae-primary); margin-bottom: 48px; }
+.cl-header .eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dae-secondary); margin: 0 0 12px; }
+.cl-header h1 { font-size: 36px; font-weight: 800; color: var(--dae-primary); margin: 0 0 12px; letter-spacing: -0.02em; }
+.cl-header p { font-size: 15px; color: var(--dae-secondary); margin: 0; }
+
+.cl-release { padding: 0 0 40px; margin-bottom: 32px; border-bottom: 1px solid var(--dae-tint-2); }
+.cl-release:last-child { border-bottom: 0; }
+
+.cl-release-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+.cl-version { font-family: ui-monospace, Menlo, monospace; font-size: 18px; font-weight: 700; color: var(--dae-primary); margin: 0; }
+.cl-version .tag { display: inline-block; background: var(--dae-primary); color: white; font-size: 9px; font-weight: 700; letter-spacing: 0.10em; padding: 3px 8px; border-radius: 4px; margin-left: 8px; text-transform: uppercase; vertical-align: middle; }
+.cl-date { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--dae-secondary); }
+
+.cl-summary { font-size: 14px; color: var(--dae-secondary); margin: 0 0 20px; font-style: italic; }
+
+.cl-group { margin-bottom: 18px; }
+.cl-group h3 { font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; margin: 0 0 8px; padding: 3px 10px; border-radius: 4px; display: inline-block; color: white; }
+.cl-group.added h3 { background: var(--added); }
+.cl-group.changed h3 { background: var(--changed); }
+.cl-group.fixed h3 { background: var(--fixed); }
+.cl-group.removed h3 { background: var(--removed); }
+.cl-group ul { list-style: none; padding: 0; margin: 6px 0 0; }
+.cl-group li { padding: 4px 0 4px 18px; position: relative; font-size: 14px; line-height: 1.55; color: var(--dae-fg); }
+.cl-group li::before { content: "•"; position: absolute; left: 4px; color: var(--dae-secondary); }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="cl dae-sortable-container" data-pdf-root>
+
+  <header class="cl-header">
+    <p class="eyebrow" data-editable>Changelog</p>
+    <h1 data-editable>{{PRODUCT_NAME}}</h1>
+    <p data-editable>{{INTRO_BLURB}}</p>
+  </header>
+
+  <section class="cl-release dae-sortable-container">
+    <div class="cl-release-head">
+      <h2 class="cl-version"><span data-editable>{{V1_VERSION}}</span><span class="tag" data-editable>latest</span></h2>
+      <span class="cl-date" data-editable>{{V1_DATE}}</span>
+    </div>
+    <p class="cl-summary" data-editable>{{V1_SUMMARY}}</p>
+
+    <div class="cl-group added">
+      <h3>Added</h3>
+      <ul class="dae-sortable-container">
+        <li data-editable>{{V1_ADDED_1}}</li>
+        <li data-editable>{{V1_ADDED_2}}</li>
+        <li data-editable>{{V1_ADDED_3}}</li>
+      </ul>
+    </div>
+
+    <div class="cl-group changed">
+      <h3>Changed</h3>
+      <ul class="dae-sortable-container">
+        <li data-editable>{{V1_CHANGED_1}}</li>
+        <li data-editable>{{V1_CHANGED_2}}</li>
+      </ul>
+    </div>
+
+    <div class="cl-group fixed">
+      <h3>Fixed</h3>
+      <ul class="dae-sortable-container">
+        <li data-editable>{{V1_FIXED_1}}</li>
+        <li data-editable>{{V1_FIXED_2}}</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cl-release dae-sortable-container">
+    <div class="cl-release-head">
+      <h2 class="cl-version"><span data-editable>{{V2_VERSION}}</span></h2>
+      <span class="cl-date" data-editable>{{V2_DATE}}</span>
+    </div>
+    <p class="cl-summary" data-editable>{{V2_SUMMARY}}</p>
+
+    <div class="cl-group added">
+      <h3>Added</h3>
+      <ul class="dae-sortable-container">
+        <li data-editable>{{V2_ADDED_1}}</li>
+        <li data-editable>{{V2_ADDED_2}}</li>
+      </ul>
+    </div>
+
+    <div class="cl-group removed">
+      <h3>Removed</h3>
+      <ul class="dae-sortable-container">
+        <li data-editable>{{V2_REMOVED_1}}</li>
+      </ul>
+    </div>
+  </section>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>
