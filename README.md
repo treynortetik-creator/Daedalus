@@ -1,10 +1,20 @@
 # Daedalus
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Self-contained](https://img.shields.io/badge/build_step-none-green.svg)](#)
+[![Vendored deps](https://img.shields.io/badge/vendored-Sortable_·_html2canvas_·_jsPDF-orange.svg)](#vendored-dependencies)
+
 > **A drop-in HTML editor that turns any static page into a round-trip editable artifact.**
+
+![Demo](docs/demo.gif)
+
+**[→ Try the live demo](https://treynor-the-creator.github.io/daedalus/)** (works in any browser — no install)
 
 You ship one `.html` file. Whoever opens it gets a small toolbar at bottom-right. They click **Edit**, the page becomes WYSIWYG: click any outlined text to type, hover a photo to swap it, drag handles to reorder blocks, pop a floating menu for B/I/U/color/size/links, autosave to localStorage every 5 seconds, save as a clean PDF in one click, or present fullscreen.
 
 No app. No install. No build step. No server. Works offline. One self-contained file.
+
+> _Named for the mythological craftsman who built the Labyrinth, designed working wings, and shipped self-contained artifacts (with admittedly mixed customer outcomes). This package ships the editor; the warnings about flying too close to the sun are your responsibility._
 
 ## What's in this repo
 
