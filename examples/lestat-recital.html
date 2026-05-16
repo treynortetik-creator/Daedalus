@@ -399,6 +399,23 @@ body.dae-edit-mode .dae-photo-wrap .dae-photo-overlay { display: flex; }
 .dae-photo-size-toggle button:hover { background: rgba(255,255,255,0.32); transform: scale(1.04); }
 .dae-photo-size-toggle button.active { background: var(--dae-accent, #0066cc); }
 
+/* When a photo wrapper has been free-resized (browser's resize:both handle
+   adds inline width/height to the element), force the inner <img> to fill
+   the wrapper. Without this, the template's fixed-height img stays put
+   while the wrapper grows around it, leaving the user staring at a strip
+   of empty space below the image instead of a taller image. */
+.dae-photo-wrap.dae-sortable-block[style*="height"],
+.dae-photo-wrap.dae-sortable-block[style*="width"] {
+  display: block;
+}
+.dae-photo-wrap.dae-sortable-block[style*="height"] img[data-editable-photo],
+.dae-photo-wrap.dae-sortable-block[style*="width"] img[data-editable-photo] {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  display: block;
+}
+
 /* Drag-and-drop image feedback — body class toggled by global drag listeners.
    The ::before is the floating "Drop image..." banner; the outlines call out
    the existing photos as drop targets. */
@@ -1498,18 +1515,29 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         exitRepositionMode(img);
       }
     };
+    // Click outside the photo also commits + exits. Without this, the user
+    // is stuck — the overlay (with the Replace button) is hidden until they
+    // discover the Esc shortcut. Attached on a microtask so the initial
+    // click that entered reposition mode doesn't also fire this handler.
+    const onDocClick = (e) => {
+      if (!wrap || !wrap.contains(e.target)) {
+        exitRepositionMode(img);
+      }
+    };
 
     img.addEventListener('mousedown', onMouseDown);
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('keydown', onKey);
-    img._syRepositionCleanup = () => {
+    setTimeout(() => document.addEventListener('click', onDocClick), 0);
+    img._daeRepositionCleanup = () => {
       img.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('keydown', onKey);
+      document.removeEventListener('click', onDocClick);
     };
-    toast('Drag the photo to reposition. Press Esc when done.');
+    toast('Drag to reposition · Esc or click outside to commit');
   }
 
   function exitRepositionMode(img) {
@@ -1517,9 +1545,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     const wrap = img.closest('.dae-photo-wrap');
     const overlay = wrap && wrap.querySelector('.dae-photo-overlay');
     if (overlay) overlay.style.display = '';
-    if (img._syRepositionCleanup) {
-      img._syRepositionCleanup();
-      delete img._syRepositionCleanup;
+    if (img._daeRepositionCleanup) {
+      img._daeRepositionCleanup();
+      delete img._daeRepositionCleanup;
     }
     toast('Photo position locked.');
   }
