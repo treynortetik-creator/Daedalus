@@ -215,6 +215,27 @@ body.dae-edit-mode .dae-photo-wrap .dae-photo-overlay { display: flex; }
 .dae-photo-size-toggle button:hover { background: rgba(255,255,255,0.32); transform: scale(1.04); }
 .dae-photo-size-toggle button.active { background: var(--dae-accent, #0066cc); }
 
+/* Drag-and-drop image feedback — body class toggled by global drag listeners.
+   The ::before is the floating "Drop image..." banner; the outlines call out
+   the existing photos as drop targets. */
+body.dae-dragging::before {
+  content: "Drop an image to replace a photo or add a new photo block";
+  position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 1001;
+  background: var(--dae-accent, #0066cc); color: white;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px; font-weight: 600; padding: 10px 18px; border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.30); pointer-events: none;
+}
+body.dae-dragging [data-editable-photo] {
+  outline: 3px dashed var(--dae-accent, #0066cc) !important;
+  outline-offset: 4px;
+}
+body.dae-dragging [data-pdf-root] {
+  outline: 2px dashed var(--dae-tint-1, #cce0ff);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+
 /* ──────────────── EDIT MODE v2.4 — added in this version ──────────────── */
 
 /* Photo reposition mode — drag the image to shift object-position */
@@ -1442,6 +1463,96 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   els.photoInput.addEventListener('cancel', () => {
     cancelPendingPhotoInsert();
     activePhoto = null;
+  });
+
+  // ── Drag-and-drop image upload ──────────────────────────────────────────
+  // Drop an image file onto any photo → replace it. Drop into empty space
+  // inside the doc → insert a new photo block. Same compression pipeline
+  // as the file-picker flow (auto-resize to 2048px). Only active in edit
+  // mode. Files-only — non-image drops fall through to browser default
+  // (Sortable's own drag events use HTML5 DnD but with no `Files` in
+  // dataTransfer.types, so the two coexist cleanly).
+  //
+  // `_dragDepth` counter handles bubbling dragenter/dragleave events so
+  // the body class only clears when the cursor leaves the entire window,
+  // not just when crossing nested element boundaries.
+
+  let _dragDepth = 0;
+  function _isFileDrag(e) {
+    return e.dataTransfer && e.dataTransfer.types && [...e.dataTransfer.types].includes('Files');
+  }
+
+  document.addEventListener('dragenter', (e) => {
+    if (!editMode || !_isFileDrag(e)) return;
+    _dragDepth++;
+    document.body.classList.add('dae-dragging');
+  });
+  document.addEventListener('dragleave', (e) => {
+    if (!editMode || !_isFileDrag(e)) return;
+    _dragDepth--;
+    if (_dragDepth <= 0) {
+      _dragDepth = 0;
+      document.body.classList.remove('dae-dragging');
+    }
+  });
+  document.addEventListener('dragover', (e) => {
+    if (!editMode || !_isFileDrag(e)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  });
+  document.addEventListener('drop', async (e) => {
+    _dragDepth = 0;
+    document.body.classList.remove('dae-dragging');
+    if (!editMode) return;
+    const files = e.dataTransfer && e.dataTransfer.files;
+    if (!files || files.length === 0) return;
+    const imageFile = [...files].find(f => f.type && f.type.startsWith('image/'));
+    if (!imageFile) return;
+    e.preventDefault();
+
+    // 1. Drop on a photo → replace it.
+    const photoTarget = e.target.closest && e.target.closest('[data-editable-photo]');
+    if (photoTarget) {
+      pushUndo('photo-replace', { target: photoTarget, prevSrc: photoTarget.src });
+      toast('Compressing dropped photo…');
+      try {
+        photoTarget.src = await compressImage(imageFile);
+        toast('Photo replaced.');
+      } catch (err) {
+        toast('Photo replace failed.');
+      }
+      return;
+    }
+
+    // 2. Drop into empty space → insert a new photo block at the end of
+    //    the closest sortable container under the drop. If the drop wasn't
+    //    inside the doc at all, fall back to [data-pdf-root].
+    const root = findPdfRoot();
+    let container = (e.target.closest && e.target.closest(SORTABLE_CONTAINER)) || root;
+    if (!container || (root && !root.contains(container) && container !== root)) {
+      toast('Drop inside the document to add a photo.');
+      return;
+    }
+    const tpl = $('#tpl-photo');
+    if (!tpl) return;
+    const fragment = tpl.content.cloneNode(true);
+    const newBlock = fragment.firstElementChild;
+    if (!newBlock) return;
+    const addBtn = container.querySelector(':scope > .dae-add-block-btn');
+    if (addBtn) container.insertBefore(newBlock, addBtn);
+    else container.appendChild(newBlock);
+    pushUndo('insert', { inserted: newBlock });
+    setupBlock(newBlock);
+    const img = newBlock.querySelector('[data-editable-photo]');
+    if (!img) return;
+    toast('Compressing dropped photo…');
+    try {
+      img.src = await compressImage(imageFile);
+      toast('Photo inserted.');
+    } catch (err) {
+      toast('Photo insert failed.');
+      newBlock.remove();
+    }
   });
 
   // Block controls (drag | + insert | × delete)

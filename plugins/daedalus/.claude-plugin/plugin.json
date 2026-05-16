@@ -1,7 +1,7 @@
 {
   "name": "daedalus",
   "description": "Generate self-contained HTML artifacts with a built-in round-trip editor. End users open the file in any browser, click to edit text, swap photos, reorder blocks, apply formatting from a Medium-style floating menu, export to PDF, or present fullscreen. Autosaves to localStorage. No build step, no install, works offline.",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": {
     "name": "treynortetik-creator",
     "url": "https://github.com/treynortetik-creator"

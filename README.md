@@ -25,7 +25,7 @@ No app. No install. No build step. No server. Works offline. One self-contained 
 | [`plugins/daedalus/skills/editor/themes/`](plugins/daedalus/skills/editor/themes/) | **4 theme presets** — Greek/sepia, dark mode, minimal, brutalist. Copy-paste CSS overrides. |
 | [`plugins/daedalus/skills/editor/references/editor.md`](plugins/daedalus/skills/editor/references/editor.md) | **The canonical editor reference** — toolbar HTML/CSS/JS as inline-able code blocks + the markup contract + design rationale. ~2,200 lines. |
 | [`plugins/daedalus/`](plugins/daedalus/) | **Claude Code plugin** — invoke `/daedalus` and Claude scaffolds an artifact for you with the editor baked in. |
-| [`examples/`](examples/) | **Sample artifact** — the Daedalus & Sons onepager from the demo GIF, ready to open in any browser. |
+| [`examples/`](examples/) | **Sample artifacts** — the Daedalus & Sons onepager (from the demo GIF) and a dark-cathedral concert programme for a midnight piano recital by the Vampire Lestat. Open in any browser. |
 
 ## Install (Claude Code)
 
@@ -69,6 +69,7 @@ That's the whole contract. Full details in [editor.md](plugins/daedalus/skills/e
 | **Comments / annotations** | Select text → click 💬 in the floating menu → sticky note appears in the right sidebar. Author prompted once + persisted. Resolve, reopen, edit, delete. Round-trips through HTML download via an inert `<template>` so reviewers can keep iterating offline. |
 | **Tables** | Insert menu → Table. Click into any cell → tiny `+ Row / + Col / − Row / − Col` toolbar appears below. No row limits. |
 | **Photo replace** | Hover any `data-editable-photo` → "Replace photo" → file picker → auto-compressed to 2048px wide. |
+| **Drag-and-drop image upload** | Drag an image file from your desktop onto any photo to replace it, or onto empty doc space to insert a new photo block. Auto-compressed, undoable. |
 | **Photo reposition** | Hover → "Reposition" → drag to shift `object-position`. Esc to lock. |
 | **Photo resize** | Inline photos get Full / Half / Third buttons. Hero photos stay layout-locked. |
 | **Free-resize blocks** | Every block has a brand-styled corner drag handle (`resize: both`). |

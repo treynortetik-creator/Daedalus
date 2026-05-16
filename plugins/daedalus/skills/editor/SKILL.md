@@ -94,6 +94,7 @@ The toolbar inherits the host page's font stack — to change fonts, edit the pa
 Read `references/editor.md` for the full capabilities table. Highlights:
 - Text editing via `contenteditable` with brand-styled outlines on hover/focus
 - Photo replace (auto-compressed to 2048px) + reposition (drag to shift `object-position`) + resize (Full/Half/Third for inline photos)
+- Drag-and-drop image upload: drop a file onto any photo to swap it, or onto empty doc space to insert a new photo block
 - Block reorder/insert/delete via floating handles + Sortable.js
 - Floating format menu (Medium/Notion style) for B/I/U, color swatches, font sizes, link insert/edit
 - Autosave to localStorage every 5s while editing, with restore-on-reload banner
