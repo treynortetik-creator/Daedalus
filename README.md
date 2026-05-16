@@ -72,7 +72,8 @@ That's the whole contract. Full details in [editor.md](plugins/daedalus/skills/e
 | **Photo reposition** | Hover → "Reposition" → drag to shift `object-position`. Esc to lock. |
 | **Photo resize** | Inline photos get Full / Half / Third buttons. Hero photos stay layout-locked. |
 | **Free-resize blocks** | Every block has a brand-styled corner drag handle (`resize: both`). |
-| **Reorder / insert / delete blocks** | Hover any block → drag the `≡` to move, click `+` to insert a heading/paragraph/pullquote/callout/photo/spacer, click `×` to delete. Cmd+Z undoes. |
+| **Reorder / insert / delete blocks** | Hover any block → drag the `≡` to move, click `+` to insert a heading/paragraph/pullquote/callout/table/photo/spacer, click `×` to delete. Cmd+Z undoes. |
+| **Change block style** | Hover a text block → click the `↔` button → pick heading / paragraph / pull quote / callout. The text + inline formatting + links + comment anchors all survive. Shortcuts: `Cmd+Opt+H/P/Q/C`. Skipped for photos/tables/spacers (no sane text mapping). |
 | **Undo** | 50-step undo for non-text operations (delete, insert, reorder, photo replace). Cmd+Z when not in a contenteditable. |
 | **Autosave + Restore** | Snapshots every 5 seconds to `localStorage`. On reload, if there are unsaved edits, a banner offers Restore / Discard. |
 | **Versions** | Toolbar button opens a popover listing the last 5 snapshots — click any to restore. |

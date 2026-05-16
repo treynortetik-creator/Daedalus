@@ -15,7 +15,8 @@ A reusable, drop-in HTML editor that turns any static page into a round-trip edi
 | Reposition photo within frame | Hover photo → click `Reposition` → drag the image. The visible portion shifts via `object-position`. Esc to lock. |
 | Free-resize any block | In edit mode, every block has a brand-styled drag handle in the bottom-right corner (CSS `resize: both`). Drag to resize width and height freely. |
 | Reorder blocks | Hover a block → grab the ≡ handle → drag, including across sections |
-| Insert a block | Hover a block → click the + → pick from 6 templates (heading, paragraph, pull quote, callout, photo, spacer). Or click "+ Add block" at the end of a section. When the current block is inside a nested container (e.g., a 3-column grid), the menu also offers "↑ Add outside this section" to insert at the parent container level. |
+| Insert a block | Hover a block → click the + → pick from 7 templates (heading, paragraph, pull quote, callout, table, photo, spacer). Or click "+ Add block" at the end of a section. When the current block is inside a nested container (e.g., a 3-column grid), the menu also offers "↑ Add outside this section" to insert at the parent container level. |
+| Change block style | Hover a text block → click the ↔ → pick heading / paragraph / pull quote / callout. The block's text (plus inline formatting + comment anchors + links) survives the conversion. Shortcuts: `Cmd+Opt+H/P/Q/C`. Only offered for text blocks — photos, tables, spacers don't have a sane text-block analog. |
 | Delete a block | Hover a block → click the × |
 | Insert / edit a hyperlink | Select text → `Cmd+K` or click the Link button. Modal accepts the URL and an "open in new tab" toggle. Editing an existing link surfaces a Remove button. Bare domains auto-prefix `https://`, bare emails auto-prefix `mailto:`. |
 | Undo | `Cmd+Z` (when not in a contenteditable) or the Undo button (50-step stack) |
@@ -396,6 +397,7 @@ body.dae-pdf-export-mode .dae-add-block-btn,
 body.dae-pdf-export-mode .dae-insert-menu,
 body.dae-pdf-export-mode .dae-link-modal,
 body.dae-pdf-export-mode .dae-size-menu,
+body.dae-pdf-export-mode .dae-style-menu,
 body.dae-pdf-export-mode .dae-restore-prompt,
 body.dae-pdf-export-mode .dae-versions-menu { display: none !important; }
 body.dae-pdf-export-mode .dae-spacer { background: transparent !important; border: 0 !important; }
@@ -420,8 +422,17 @@ body.dae-edit-mode .dae-sortable-block:hover > .dae-block-controls { opacity: 1;
 .dae-block-controls .dae-drag:hover { background: var(--dae-accent, #0066cc); }
 .dae-block-controls .dae-insert { background: var(--dae-accent, #0066cc); }
 .dae-block-controls .dae-insert:hover { background: var(--dae-primary, #1a1a1a); }
+.dae-block-controls .dae-style { background: var(--dae-secondary, #4a4a4a); }
+.dae-block-controls .dae-style:hover { background: var(--dae-primary, #1a1a1a); }
 .dae-block-controls .dae-delete { background: var(--dae-warm, #cc3300); }
 .dae-block-controls .dae-delete:hover { background: #E84A2A; transform: scale(1.08); }
+
+/* Block-style popover — opened by the ↔ button on each block */
+.dae-style-menu { position: absolute; z-index: 200; background: white; border: 1.5px solid var(--dae-tint-2, #d8d8d8); border-radius: 10px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18); padding: 6px; min-width: 180px; font-family: ui-sans-serif, system-ui, sans-serif; }
+.dae-style-menu button { appearance: none; border: 0; width: 100%; background: transparent; text-align: left; cursor: pointer; padding: 8px 10px; border-radius: 6px; font-family: inherit; font-weight: 600; font-size: 13px; color: var(--dae-primary, #1a1a1a); display: flex; align-items: center; gap: 10px; transition: background 0.12s; }
+.dae-style-menu button:hover { background: var(--dae-tint-4, #f6f6f6); }
+.dae-style-menu .menu-icon { flex: 0 0 24px; height: 24px; border-radius: 4px; background: var(--dae-tint-3, #ececec); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: var(--dae-primary, #1a1a1a); }
+.dae-style-menu .menu-label { flex: 1; }
 
 /* End-of-container "+ Add block" button */
 .dae-add-block-btn { display: none; width: 100%; margin: 16px 0 0; padding: 12px 16px; background: transparent; border: 1.5px dashed var(--dae-tint-2, #d8d8d8); border-radius: 8px; color: var(--dae-secondary, #4a4a4a); font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.15s; }
@@ -479,6 +490,7 @@ body.dae-present-mode .dae-add-block-btn,
 body.dae-present-mode .dae-insert-menu,
 body.dae-present-mode .dae-link-modal,
 body.dae-present-mode .dae-size-menu,
+body.dae-present-mode .dae-style-menu,
 body.dae-present-mode .dae-restore-prompt,
 body.dae-present-mode .dae-versions-menu { display: none !important; }
 body.dae-present-mode [data-pdf-root] { box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6) !important; }
@@ -588,7 +600,7 @@ body.dae-present-mode .dae-comment-anchor { background: transparent !important; 
 }
 
 @media print {
-  .dae-edit-toolbar, .dae-text-menu, .dae-photo-overlay, .dae-toast, .dae-block-controls, .dae-add-block-btn, .dae-insert-menu, .dae-link-modal, .dae-size-menu, .dae-restore-prompt, .dae-versions-menu, .dae-present-hint { display: none !important; }
+  .dae-edit-toolbar, .dae-text-menu, .dae-photo-overlay, .dae-toast, .dae-block-controls, .dae-add-block-btn, .dae-insert-menu, .dae-link-modal, .dae-size-menu, .dae-style-menu, .dae-restore-prompt, .dae-versions-menu, .dae-present-hint { display: none !important; }
   /* Spacer keeps its layout reservation in print (so spacing carries to PDF) but loses the dashed-pattern fill */
   .dae-spacer { background: transparent !important; border: 0 !important; }
   .dae-spacer::after { display: none !important; }
@@ -681,6 +693,11 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
       }
     } else if (action === 'insert') {
       if (data.inserted && data.inserted.isConnected) data.inserted.remove();
+    } else if (action === 'style-change') {
+      if (data.replacement && data.replacement.isConnected && data.parent && data.parent.isConnected) {
+        data.parent.replaceChild(data.previous, data.replacement);
+        setupBlock(data.previous);
+      }
     } else if (action === 'reorder') {
       if (data.item && data.parent && data.parent.isConnected) {
         if (data.before && data.before.isConnected) data.parent.insertBefore(data.item, data.before);
@@ -969,7 +986,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
   }
 
   function attachBlockControls(block) {
-    if (block.dataset.syControls === '1') return;
+    if (block.dataset.daeControls === '1') return;
     block.classList.add('dae-sortable-block');
     const controls = document.createElement('div');
     controls.className = 'dae-block-controls';
@@ -977,15 +994,166 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     controls.appendChild(makeControlButton('dae-insert', '+', 'Insert block below', (e) => {
       openInsertMenu(e.currentTarget, block.parentElement, indexOfBlock(block) + 1);
     }));
+    if (isStylableBlock(block)) {
+      controls.appendChild(makeControlButton('dae-style', '↔', 'Change block style (heading / paragraph / quote / callout)', (e) => {
+        openStyleMenu(e.currentTarget, block);
+      }));
+    }
     controls.appendChild(makeControlButton('dae-delete', '×', 'Delete block', () => deleteBlock(block)));
     block.appendChild(controls);
-    block.dataset.syControls = '1';
+    block.dataset.daeControls = '1';
   }
 
   function indexOfBlock(block) {
     const children = [...block.parentElement.children].filter(c => !c.classList.contains('dae-add-block-btn'));
     return children.indexOf(block);
   }
+
+  // ── Block style transformer (heading ↔ paragraph ↔ pullquote ↔ callout) ─
+  // Turns one text block into another type without losing content. Source's
+  // primary editable element's children move to the target's primary slot,
+  // so inline formatting (B/I/U/links/colors), comment anchors, and any
+  // other DOM state on the text all survive.
+  //
+  // Only offered for blocks that have a clean text mapping — skipped for
+  // photos, tables, spacers (no sane text-to-text mapping exists).
+
+  const STYLE_OPTIONS = [
+    { id: 'heading',   label: 'Heading',     icon: 'H',  primarySelector: 'h2' },
+    { id: 'paragraph', label: 'Paragraph',   icon: '¶',  primarySelector: 'p' },
+    { id: 'pullquote', label: 'Pull quote',  icon: '"',  primarySelector: '.pullquote-text' },
+    { id: 'callout',   label: 'Callout box', icon: '⚡', primarySelector: '.tldr > p:not(.tldr-label)' },
+  ];
+
+  function isStylableBlock(block) {
+    // Skip photos, tables, spacers — they have no text-block analog.
+    if (!block || !block.querySelector) return false;
+    if (block.querySelector('[data-editable-photo]')) return false;
+    if (block.classList.contains('dae-spacer')) return false;
+    if (block.classList.contains('dae-table-block')) return false;
+    // Block must have at least one editable text region to convert.
+    return !!block.querySelector('[data-editable]') || (block.matches && block.matches('[data-editable]'));
+  }
+
+  function findPrimaryEditableEl(block) {
+    // The element whose CONTENTS we'll move to the target. Strategy: longest
+    // text wins. For single-editable blocks this is trivially the only one;
+    // for compound blocks (pullquote with num + text) we want the text body.
+    const candidates = [];
+    if (block.matches && block.matches('[data-editable]')) candidates.push(block);
+    block.querySelectorAll('[data-editable]').forEach(el => candidates.push(el));
+    if (candidates.length === 0) return null;
+    let best = candidates[0];
+    for (const c of candidates) {
+      if (c.textContent.length > best.textContent.length) best = c;
+    }
+    return best;
+  }
+
+  function convertBlockStyle(block, targetId) {
+    const opt = STYLE_OPTIONS.find(o => o.id === targetId);
+    if (!opt) return;
+    if (!isStylableBlock(block)) {
+      toast('This block type can\'t change style.');
+      return;
+    }
+    const tpl = document.querySelector('#tpl-' + opt.id);
+    if (!tpl) return;
+
+    const sourceEl = findPrimaryEditableEl(block);
+    if (!sourceEl) return;
+
+    // Snapshot for undo BEFORE we mutate the source. Strip edit chrome
+    // (controls divs, photo overlays, the class+dataset flags) so setupBlock
+    // can re-wire from a clean state on undo.
+    const undoClone = block.cloneNode(true);
+    undoClone.querySelectorAll('.dae-block-controls, .dae-photo-overlay').forEach(el => el.remove());
+    undoClone.classList.remove('dae-sortable-block');
+    delete undoClone.dataset.daeControls;
+
+    // Build the replacement block from the template.
+    const fragment = tpl.content.cloneNode(true);
+    const newBlock = fragment.firstElementChild;
+    if (!newBlock) return;
+    // When the template's primarySelector matches the root itself (e.g. a
+    // <h2> template where the h2 IS the block), querySelector won't return
+    // self — fall back to newBlock.
+    const primary = newBlock.querySelector(opt.primarySelector) ||
+                    (newBlock.matches && newBlock.matches(opt.primarySelector) ? newBlock : newBlock);
+
+    // Move child nodes — but skip edit chrome that may have been appended to
+    // sourceEl when sourceEl IS the block (heading/paragraph case). Without
+    // this filter, the controls div would get yanked into the new block's
+    // primary slot, then setupBlock would add a SECOND controls div.
+    const nodesToMove = [...sourceEl.childNodes].filter(n => {
+      if (n.nodeType !== 1) return true; // text nodes always move
+      return !n.classList || (!n.classList.contains('dae-block-controls') &&
+                              !n.classList.contains('dae-photo-overlay'));
+    });
+    while (primary.firstChild) primary.removeChild(primary.firstChild);
+    for (const n of nodesToMove) primary.appendChild(n);
+
+    const parent = block.parentElement;
+    pushUndo('style-change', { previous: undoClone, replacement: newBlock, parent });
+    parent.replaceChild(newBlock, block);
+    setupBlock(newBlock);
+
+    if (editMode) {
+      applyEditable(true);
+      const focusTarget = newBlock.querySelector('[data-editable]') ||
+                          (newBlock.matches('[data-editable]') ? newBlock : null);
+      if (focusTarget && focusTarget.focus) {
+        focusTarget.focus();
+        const sel = window.getSelection();
+        const range = document.createRange();
+        try { range.selectNodeContents(focusTarget); range.collapse(false); sel.removeAllRanges(); sel.addRange(range); } catch (_) {}
+      }
+    }
+    toast('Changed to ' + opt.label + '.');
+  }
+
+  let activeStyleMenu = null;
+
+  function closeStyleMenu() {
+    if (activeStyleMenu) { activeStyleMenu.remove(); activeStyleMenu = null; }
+  }
+
+  function openStyleMenu(trigger, block) {
+    closeStyleMenu();
+    const menu = document.createElement('div');
+    menu.className = 'dae-style-menu';
+    STYLE_OPTIONS.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      const icon = document.createElement('span');
+      icon.className = 'menu-icon';
+      icon.textContent = opt.icon;
+      const label = document.createElement('span');
+      label.className = 'menu-label';
+      label.textContent = opt.label;
+      btn.appendChild(icon);
+      btn.appendChild(label);
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        convertBlockStyle(block, opt.id);
+        closeStyleMenu();
+      });
+      menu.appendChild(btn);
+    });
+    document.body.appendChild(menu);
+    const rect = trigger.getBoundingClientRect();
+    menu.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+    menu.style.left = (window.scrollX + rect.left) + 'px';
+    activeStyleMenu = menu;
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!activeStyleMenu) return;
+    if (activeStyleMenu.contains(e.target)) return;
+    if (e.target.closest && e.target.closest('.dae-style')) return;
+    closeStyleMenu();
+  });
 
   function deleteBlock(block) {
     const parent = block.parentElement;
@@ -994,7 +1162,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     const clone = block.cloneNode(true);
     clone.querySelectorAll('.dae-block-controls, .dae-photo-overlay').forEach(el => el.remove());
     clone.classList.remove('dae-sortable-block');
-    delete clone.dataset.syControls;
+    delete clone.dataset.daeControls;
     pushUndo('delete', { parent, node: clone, before: next });
     block.remove();
     toast('Block deleted. Undo with Cmd+Z.');
@@ -1610,14 +1778,32 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     }
   }, true);
 
-  // ── Keyboard shortcuts (Cmd+B/I/U/E/K/Z) ────────────────────────────────
+  // ── Keyboard shortcuts (Cmd+B/I/U/E/K/Z + Cmd+Opt+H/P/Q/C) ──────────────
   document.addEventListener('keydown', (e) => {
     const meta = e.metaKey || e.ctrlKey;
     if (!meta) return;
-    if (e.key === 'e') { e.preventDefault(); setEditMode(!editMode); return; }
+    if (e.key === 'e' && !e.altKey) { e.preventDefault(); setEditMode(!editMode); return; }
     if (!editMode) return;
     const focused = document.activeElement;
     const inEditable = focused && focused.closest && focused.closest('[data-editable]');
+    // Block style transformer shortcuts (Cmd+Opt+H/P/Q/C): convert the
+    // focused block to heading / paragraph / pullquote / callout.
+    if (e.altKey && inEditable) {
+      let targetId = null;
+      if (e.key === 'h' || e.key === 'H' || e.code === 'KeyH') targetId = 'heading';
+      else if (e.key === 'p' || e.key === 'P' || e.code === 'KeyP') targetId = 'paragraph';
+      else if (e.key === 'q' || e.key === 'Q' || e.code === 'KeyQ') targetId = 'pullquote';
+      else if (e.key === 'c' || e.key === 'C' || e.code === 'KeyC') targetId = 'callout';
+      if (targetId) {
+        const block = inEditable.closest('.dae-sortable-block');
+        if (block && isStylableBlock(block)) {
+          e.preventDefault();
+          convertBlockStyle(block, targetId);
+          return;
+        }
+      }
+    }
+    if (e.altKey) return;
     if (e.key === 'z' && !inEditable) { e.preventDefault(); undo(); return; }
     if (e.key === 'k' && inEditable) { e.preventDefault(); openLinkModal(); return; }
     if (!inEditable) return;
@@ -1720,6 +1906,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     closeLinkModal();
     hideTextMenu();
     closeSizeMenu();
+    closeStyleMenu();
     closeMenu();
     closeVersionsMenu();
     activePhoto = null;
@@ -1766,7 +1953,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     clone.querySelectorAll('.dae-block-controls, .dae-photo-overlay, .dae-add-block-btn').forEach(el => el.remove());
     clone.querySelectorAll('.dae-sortable-block').forEach(el => {
       el.classList.remove('dae-sortable-block');
-      delete el.dataset.syControls;
+      delete el.dataset.daeControls;
     });
     clone.querySelectorAll('[contenteditable]').forEach(el => {
       el.removeAttribute('contenteditable');
@@ -2378,6 +2565,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
   function enterPresentMode() {
     closeMenu();
     closeSizeMenu();
+    closeStyleMenu();
     closeVersionsMenu();
     hideTextMenu();
     hideRestorePrompt();
@@ -2606,7 +2794,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     });
     clone.querySelectorAll('.dae-sortable-block').forEach(el => {
       el.classList.remove('dae-sortable-block');
-      delete el.dataset.syControls;
+      delete el.dataset.daeControls;
     });
     // Strip transient reposition-mode marker; preserve any inline
     // object-position the user set (that's a real edit they made)
