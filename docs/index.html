@@ -294,7 +294,10 @@ body.dae-edit-mode .dae-spacer.dae-sortable-block { min-height: 28px; }
 
 /* Block controls (drag | + insert | × delete) */
 body.dae-edit-mode .dae-sortable-block { position: relative; }
-.dae-block-controls { position: absolute; top: -14px; right: 0; display: flex; gap: 4px; pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 5; }
+/* Block controls sit INSIDE the block at top-right (not floating above with
+   top: -14px) because the free-resize feature forces overflow: auto on
+   every block, which clips anything positioned outside the content rect. */
+.dae-block-controls { position: absolute; top: 4px; right: 4px; display: flex; gap: 4px; pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 5; background: var(--dae-bg, #ffffff); padding: 2px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18); }
 body.dae-edit-mode .dae-sortable-block:hover > .dae-block-controls { opacity: 1; }
 .dae-block-controls > * { pointer-events: auto; }
 .dae-block-controls button { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 0; appearance: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18); transition: background 0.15s, transform 0.15s; color: white; font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 700; font-size: 14px; line-height: 1; padding: 0; }
