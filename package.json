@@ -1,0 +1,23 @@
+{
+  "name": "daedalus",
+  "version": "0.5.1",
+  "private": true,
+  "description": "Drop-in HTML editor that turns any static page into a round-trip editable artifact.",
+  "homepage": "https://github.com/treynortetik-creator/Daedalus",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/treynortetik-creator/Daedalus.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build-dist.js",
+    "test": "npm run build && node scripts/run-tests.js",
+    "test:only": "node scripts/run-tests.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^23.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

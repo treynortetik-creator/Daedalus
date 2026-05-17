@@ -1,5 +1,6 @@
 # Daedalus
 
+[![tests](https://github.com/treynortetik-creator/Daedalus/actions/workflows/ci.yml/badge.svg)](https://github.com/treynortetik-creator/Daedalus/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Self-contained](https://img.shields.io/badge/build_step-none-green.svg)](#)
 [![Vendored deps](https://img.shields.io/badge/vendored-Sortable_·_html2canvas_·_jsPDF-orange.svg)](#vendored-dependencies)
@@ -140,6 +141,17 @@ If your project needs unlimited editing, layer your own controls on top.
 - Safari: full support EXCEPT `localStorage` is partitioned/disabled on `file://` in some configurations. Autosave silently degrades; everything else works.
 - Firefox: full support
 - Mobile browsers: edit mode works but drag-to-reorder is finicky on touch. Best on desktop.
+
+## Tests
+
+`npm test` builds `dist/editor.html` and runs all 11 Puppeteer test suites against it (~150 assertions). Suites cover: editor load, autosave + restore + Versions menu, race + sanitizer fixes, Tables, Comments, block style transformer, drag-and-drop image upload, photo reposition + free-resize, floating format menu (B/I/U + color + size + link), block insert/delete/undo, HTML download round-trip + sanitization.
+
+```bash
+npm install
+npm test
+```
+
+CI runs the same pipeline on every push and PR — see `.github/workflows/ci.yml` and the badge at the top of this README. Full test docs in [tests/README.md](tests/README.md).
 
 ## License
 

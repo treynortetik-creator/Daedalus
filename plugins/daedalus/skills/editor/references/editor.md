@@ -2376,6 +2376,22 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     return name;
   }
 
+  // <template> elements are quirky: tpl.textContent writes to the element's
+  // direct children (NOT to tpl.content), and outerHTML serialization only
+  // includes tpl.content. So setting textContent appears to work in-session
+  // but the data is lost when the template is serialized via HTML download
+  // or autosave snapshot. Read and write via tpl.content.textContent to
+  // round-trip correctly through serialization boundaries.
+  function _tplGet(tpl) {
+    return (tpl.content && tpl.content.textContent) || '';
+  }
+  function _tplSet(tpl, str) {
+    if (tpl.content) {
+      while (tpl.content.firstChild) tpl.content.removeChild(tpl.content.firstChild);
+      tpl.content.appendChild(document.createTextNode(str));
+    }
+  }
+
   function ensureCommentsDataNode() {
     let tpl = $('#' + COMMENTS_DATA_ID);
     if (tpl) return tpl;
@@ -2383,7 +2399,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     if (!root) return null;
     tpl = document.createElement('template');
     tpl.id = COMMENTS_DATA_ID;
-    tpl.textContent = '{"comments":[]}';
+    _tplSet(tpl, '{"comments":[]}');
     root.appendChild(tpl);
     return tpl;
   }
@@ -2392,7 +2408,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
     const tpl = $('#' + COMMENTS_DATA_ID);
     if (!tpl) { commentsData = { comments: [] }; return; }
     try {
-      const raw = (tpl.textContent || '').trim() || '{}';
+      const raw = _tplGet(tpl).trim() || '{}';
       const parsed = JSON.parse(raw);
       commentsData = parsed && Array.isArray(parsed.comments) ? parsed : { comments: [] };
     } catch (_) { commentsData = { comments: [] }; }
@@ -2401,7 +2417,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
   function saveCommentsToTemplate() {
     const tpl = ensureCommentsDataNode();
     if (!tpl) return;
-    tpl.textContent = JSON.stringify(commentsData);
+    _tplSet(tpl, JSON.stringify(commentsData));
   }
 
   function makeCommentId() {
@@ -2923,7 +2939,7 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
 
     const clone = document.documentElement.cloneNode(true);
     clone.querySelectorAll(
-      '.dae-edit-toolbar, .dae-comments-panel, #dae-photo-input, .dae-toast, .dae-link-modal, .dae-size-menu, .dae-photo-overlay, .dae-block-controls, .dae-add-block-btn, .dae-insert-menu, template:not(#dae-comments-data)'
+      '.dae-edit-toolbar, .dae-comments-panel, #dae-photo-input, .dae-toast, .dae-link-modal, .dae-size-menu, .dae-style-menu, .dae-text-menu, .dae-versions-menu, .dae-restore-prompt, .dae-present-hint, .dae-photo-overlay, .dae-block-controls, .dae-add-block-btn, .dae-insert-menu, template:not(#dae-comments-data)'
     ).forEach(el => el.remove());
     const cloneBody = clone.querySelector('body');
     if (cloneBody) cloneBody.classList.remove('dae-edit-mode');
