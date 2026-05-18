@@ -548,7 +548,12 @@ body.dae-present-mode .dae-sortable-block { resize: none !important; overflow: v
    Round-trip review layer. Comments anchor to text via wrapping spans
    (.dae-comment-anchor[data-comment-id="..."]). Data lives in a hidden
    <template id="dae-comments-data"> inside the [data-pdf-root] so it
-   survives autosave snapshots and HTML download round-trips. */
+   survives autosave snapshots and HTML download round-trips.
+
+   On download, the editor also inlines each comment as a native
+   <details class="dae-comment-export"> next to its anchor so the
+   exported HTML displays comments without the editor JS. Round-trip
+   safe: loadCommentsFromTemplate strips these on re-open. */
 
 .dae-comment-anchor {
   background: rgba(252, 211, 77, 0.35);
@@ -2405,6 +2410,10 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
   }
 
   function loadCommentsFromTemplate() {
+    // Strip any <details class="dae-comment-export"> elements that came in
+    // via re-opening a previously downloaded HTML. The editor renders
+    // comments in its side panel; the exported details are display-only.
+    document.querySelectorAll('.dae-comment-export, style[data-dae-comments-export]').forEach(el => el.remove());
     const tpl = $('#' + COMMENTS_DATA_ID);
     if (!tpl) { commentsData = { comments: [] }; return; }
     try {
@@ -2976,6 +2985,61 @@ Uses `createElement` + `textContent` + cloned DOM nodes — no string-to-HTML co
         }
       });
     });
+
+    // Inline comments as native <details> next to each anchor so they
+    // survive export with zero JS. The <template id="dae-comments-data">
+    // is preserved for round-trip back into Daedalus; any stale exports
+    // from prior round-trips are wiped before fresh ones are injected.
+    clone.querySelectorAll('.dae-comment-export, style[data-dae-comments-export]').forEach(el => el.remove());
+    const cTpl = clone.querySelector('#' + COMMENTS_DATA_ID);
+    if (cTpl) {
+      try {
+        const raw = (_tplGet(cTpl) || '').trim() || '{}';
+        const data = JSON.parse(raw);
+        const list = Array.isArray(data.comments) ? data.comments : [];
+        const visible = list.filter(c => c && c.id && (c.body || '').trim());
+        if (visible.length) {
+          const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, ch =>
+            ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+          const fmtTs = (ts) => {
+            const d = ts ? new Date(ts) : null;
+            return d && !isNaN(d.getTime()) ? d.toISOString().slice(0, 16).replace('T', ' ') : '';
+          };
+          const doc = clone.ownerDocument || document;
+          visible.forEach(c => {
+            const anchor = clone.querySelector(
+              '.dae-comment-anchor[data-comment-id="' + String(c.id).replace(/"/g, '\\"') + '"]'
+            );
+            if (!anchor) return;
+            const det = doc.createElement('details');
+            det.className = 'dae-comment-export' + (c.resolved ? ' resolved' : '');
+            det.setAttribute('data-comment-id', c.id);
+            const meta = [esc(c.author || 'Comment'), fmtTs(c.ts), c.resolved ? 'resolved' : '']
+              .filter(Boolean).join(' · ');
+            det.innerHTML =
+              '<summary>' + meta + '</summary>' +
+              '<p>' + esc(c.body) + '</p>';
+            anchor.insertAdjacentElement('afterend', det);
+          });
+          const cloneHead = clone.querySelector('head');
+          if (cloneHead) {
+            const style = doc.createElement('style');
+            style.setAttribute('data-dae-comments-export', '');
+            style.textContent =
+              '.dae-comment-export{display:block;margin:8px 0 14px;padding:0;font-size:.875rem;' +
+              'max-width:32em;border-left:3px solid #f59e0b;background:rgba(252,211,77,.10);' +
+              'border-radius:0 4px 4px 0;font-family:system-ui,-apple-system,sans-serif;}' +
+              '.dae-comment-export[open]{background:rgba(252,211,77,.18);}' +
+              '.dae-comment-export>summary{cursor:pointer;padding:6px 10px;font-weight:600;color:#92400e;}' +
+              '.dae-comment-export>summary::marker{color:#f59e0b;}' +
+              '.dae-comment-export>p{margin:0;padding:0 10px 10px;white-space:pre-wrap;color:#1f2937;}' +
+              '.dae-comment-export.resolved{opacity:.55;border-left-color:#9ca3af;background:rgba(156,163,175,.10);}' +
+              '.dae-comment-export.resolved>summary{color:#4b5563;}';
+            cloneHead.appendChild(style);
+          }
+        }
+      } catch (_) { /* malformed template — fall through, anchors still highlight */ }
+    }
 
     const html = '<!DOCTYPE html>\n' + clone.outerHTML;
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' });

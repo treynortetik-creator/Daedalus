@@ -73,6 +73,17 @@ async function captureDownload(page, clickSelector) {
   assert(/ROUNDTRIP_COMMENT_BODY/.test(withComments), 'comment body present in downloaded HTML');
   assert(/dae-comment-anchor/.test(withComments), 'comment anchor span preserved');
 
+  console.log('\nDownload inlines each comment as a native <details>');
+  assert(/<details[^>]*class=["'][^"']*dae-comment-export/i.test(withComments),
+    'comment rendered as <details class="dae-comment-export">');
+  assert(/<summary[^>]*>[^<]*Tester/i.test(withComments),
+    'summary includes author name');
+  assert(/data-dae-comments-export/i.test(withComments),
+    'export-specific <style> block injected');
+  const detailsMatch = withComments.match(/<details[^>]*class=["'][^"']*dae-comment-export[^"']*["'][^>]*>[\s\S]*?<\/details>/i);
+  assert(detailsMatch && /ROUNDTRIP_COMMENT_BODY/.test(detailsMatch[0]),
+    'comment body rendered inside the <details>');
+
   console.log('\nDownload sanitizes on* / javascript: defensively');
   // Inject hostile attrs directly into DOM then download
   await page.evaluate(() => {
