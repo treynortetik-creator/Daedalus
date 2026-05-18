@@ -1,0 +1,277 @@
+<!doctype html>
+<!--
+  Daedalus template: sales-proposal
+  =================================
+  Client-facing proposal: cover header + executive summary + scope of work
+  + 3-phase approach + investment table + timeline + next steps with
+  acceptance lines. Letter portrait, designed to print clean.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proposal — {{CLIENT_NAME}}</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+@page { size: Letter portrait; margin: 0.5in; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #f0f0f0; }
+body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: var(--dae-fg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+
+.proposal { max-width: 7.5in; margin: 0.5in auto; padding: 0.5in; background: var(--dae-bg); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+.sp-header { padding-bottom: 0.2in; border-bottom: 3px solid var(--dae-primary); margin-bottom: 0.35in; }
+.sp-header .eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dae-secondary); margin: 0 0 8px; }
+.sp-header h1 { font-size: 28px; line-height: 1.15; color: var(--dae-primary); margin: 0 0 0.15in; font-weight: 800; letter-spacing: -0.015em; }
+.sp-header .sp-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; font-size: 12px; }
+.sp-header .sp-meta .label { display: block; font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dae-secondary); margin-bottom: 3px; }
+.sp-header .sp-meta .value { color: var(--dae-primary); font-weight: 600; }
+
+.sp-section { margin-bottom: 0.35in; page-break-inside: avoid; }
+.sp-section h2 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.10em; color: var(--dae-secondary); margin: 0 0 0.15in; padding-bottom: 6px; border-bottom: 1px solid var(--dae-tint-2); }
+.sp-section p { font-size: 13.5px; line-height: 1.6; color: var(--dae-primary); margin: 0 0 10px; }
+
+.sp-exec { background: var(--dae-tint-4); border-left: 4px solid var(--dae-accent); padding: 14px 18px; border-radius: 4px; font-size: 14px; line-height: 1.6; color: var(--dae-primary); }
+
+ul.sp-scope { list-style: none; padding: 0; margin: 0; }
+ul.sp-scope li { display: grid; grid-template-columns: 0.3in 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--dae-tint-2); font-size: 13.5px; align-items: baseline; }
+ul.sp-scope li:last-child { border-bottom: 0; }
+ul.sp-scope li::before { content: "✓"; color: var(--dae-accent); font-weight: 700; font-size: 16px; line-height: 1; }
+ul.sp-scope li strong { display: block; margin-bottom: 2px; color: var(--dae-primary); }
+ul.sp-scope li span.scope-detail { color: var(--dae-secondary); font-size: 12.5px; line-height: 1.5; }
+
+.sp-phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.sp-phase { padding: 14px; border-radius: 8px; background: var(--dae-tint-4); border: 1.5px solid var(--dae-tint-2); }
+.sp-phase .phase-num { font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.10em; color: var(--dae-accent); margin: 0 0 6px; }
+.sp-phase h3 { font-size: 14px; font-weight: 700; color: var(--dae-primary); margin: 0 0 6px; }
+.sp-phase p { font-size: 12px; line-height: 1.45; color: var(--dae-secondary); margin: 0; }
+
+table.sp-investment { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.sp-investment thead { background: var(--dae-tint-4); }
+table.sp-investment th { text-align: left; padding: 10px 12px; font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dae-secondary); border-bottom: 1.5px solid var(--dae-tint-2); }
+table.sp-investment th.num { text-align: right; }
+table.sp-investment td { padding: 12px; border-bottom: 1px solid var(--dae-tint-3); color: var(--dae-primary); vertical-align: top; }
+table.sp-investment td.num { text-align: right; font-family: ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
+table.sp-investment .item-desc { font-size: 11.5px; color: var(--dae-secondary); margin-top: 3px; }
+table.sp-investment tr.total td { border-top: 2px solid var(--dae-primary); border-bottom: 0; font-weight: 700; padding-top: 14px; }
+table.sp-investment tr.total .num { font-size: 16px; color: var(--dae-accent); }
+
+.sp-timeline { display: flex; flex-direction: column; gap: 0; }
+.sp-milestone { display: grid; grid-template-columns: 0.9in 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px dashed var(--dae-tint-2); align-items: baseline; font-size: 13px; }
+.sp-milestone:last-child { border-bottom: 0; }
+.sp-milestone .m-when { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-accent); font-weight: 600; }
+.sp-milestone .m-what { color: var(--dae-primary); }
+.sp-milestone .m-what strong { display: block; }
+.sp-milestone .m-what .detail { font-size: 12px; color: var(--dae-secondary); }
+
+.sp-accept { background: var(--dae-primary); color: white; border-radius: 8px; padding: 0.25in 0.3in; margin-top: 0.3in; }
+.sp-accept h2 { color: white; border-bottom-color: rgba(255,255,255,0.2); }
+.sp-accept p { color: rgba(255,255,255,0.92); font-size: 13.5px; margin: 0 0 0.2in; line-height: 1.55; }
+.sp-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 0.2in; }
+.sp-sig .sig-line { border-bottom: 1.5px solid rgba(255,255,255,0.4); height: 0.5in; }
+.sp-sig .sig-label { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin: 6px 0 0; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+@media print {
+  html, body { background: white !important; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .proposal { box-shadow: none; margin: 0; padding: 0; max-width: none; }
+  .sp-section, .sp-phase, .sp-milestone, .sp-accept { page-break-inside: avoid; }
+}
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="proposal dae-sortable-container" data-pdf-root>
+
+  <header class="sp-header">
+    <p class="eyebrow" data-editable>Proposal · {{ENGAGEMENT_TYPE}}</p>
+    <h1 data-editable>{{PROPOSAL_HEADLINE}}</h1>
+    <div class="sp-meta">
+      <div>
+        <span class="label">Prepared for</span>
+        <span class="value" data-editable>{{CLIENT_NAME}}</span>
+      </div>
+      <div>
+        <span class="label">Prepared by</span>
+        <span class="value" data-editable>{{FIRM_NAME}}</span>
+      </div>
+      <div>
+        <span class="label">Date</span>
+        <span class="value" data-editable>{{PROPOSAL_DATE}}</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="sp-section">
+    <h2>Executive summary</h2>
+    <div class="sp-exec" data-editable>{{EXEC_SUMMARY}}</div>
+  </section>
+
+  <section class="sp-section">
+    <h2>Scope of work</h2>
+    <ul class="sp-scope dae-sortable-container">
+      <li>
+        <strong data-editable>{{SCOPE_1_TITLE}}</strong>
+        <span class="scope-detail" data-editable>{{SCOPE_1_DETAIL}}</span>
+      </li>
+      <li>
+        <strong data-editable>{{SCOPE_2_TITLE}}</strong>
+        <span class="scope-detail" data-editable>{{SCOPE_2_DETAIL}}</span>
+      </li>
+      <li>
+        <strong data-editable>{{SCOPE_3_TITLE}}</strong>
+        <span class="scope-detail" data-editable>{{SCOPE_3_DETAIL}}</span>
+      </li>
+      <li>
+        <strong data-editable>{{SCOPE_4_TITLE}}</strong>
+        <span class="scope-detail" data-editable>{{SCOPE_4_DETAIL}}</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="sp-section">
+    <h2>Approach</h2>
+    <div class="sp-phases dae-sortable-container">
+      <div class="sp-phase">
+        <p class="phase-num">Phase 01</p>
+        <h3 data-editable>{{PHASE_1_NAME}}</h3>
+        <p data-editable>{{PHASE_1_DESCRIPTION}}</p>
+      </div>
+      <div class="sp-phase">
+        <p class="phase-num">Phase 02</p>
+        <h3 data-editable>{{PHASE_2_NAME}}</h3>
+        <p data-editable>{{PHASE_2_DESCRIPTION}}</p>
+      </div>
+      <div class="sp-phase">
+        <p class="phase-num">Phase 03</p>
+        <h3 data-editable>{{PHASE_3_NAME}}</h3>
+        <p data-editable>{{PHASE_3_DESCRIPTION}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sp-section">
+    <h2>Investment</h2>
+    <table class="sp-investment">
+      <thead>
+        <tr>
+          <th data-editable>Line item</th>
+          <th class="num" data-editable>Amount</th>
+        </tr>
+      </thead>
+      <tbody class="dae-sortable-container">
+        <tr>
+          <td>
+            <strong data-editable>{{LINE_1_NAME}}</strong>
+            <div class="item-desc" data-editable>{{LINE_1_DESC}}</div>
+          </td>
+          <td class="num" data-editable>{{LINE_1_AMOUNT}}</td>
+        </tr>
+        <tr>
+          <td>
+            <strong data-editable>{{LINE_2_NAME}}</strong>
+            <div class="item-desc" data-editable>{{LINE_2_DESC}}</div>
+          </td>
+          <td class="num" data-editable>{{LINE_2_AMOUNT}}</td>
+        </tr>
+        <tr>
+          <td>
+            <strong data-editable>{{LINE_3_NAME}}</strong>
+            <div class="item-desc" data-editable>{{LINE_3_DESC}}</div>
+          </td>
+          <td class="num" data-editable>{{LINE_3_AMOUNT}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="total">
+          <td data-editable>Total</td>
+          <td class="num" data-editable>{{TOTAL_AMOUNT}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+
+  <section class="sp-section">
+    <h2>Timeline</h2>
+    <div class="sp-timeline dae-sortable-container">
+      <div class="sp-milestone">
+        <span class="m-when" data-editable>{{MS1_WHEN}}</span>
+        <div class="m-what">
+          <strong data-editable>{{MS1_NAME}}</strong>
+          <span class="detail" data-editable>{{MS1_DETAIL}}</span>
+        </div>
+      </div>
+      <div class="sp-milestone">
+        <span class="m-when" data-editable>{{MS2_WHEN}}</span>
+        <div class="m-what">
+          <strong data-editable>{{MS2_NAME}}</strong>
+          <span class="detail" data-editable>{{MS2_DETAIL}}</span>
+        </div>
+      </div>
+      <div class="sp-milestone">
+        <span class="m-when" data-editable>{{MS3_WHEN}}</span>
+        <div class="m-what">
+          <strong data-editable>{{MS3_NAME}}</strong>
+          <span class="detail" data-editable>{{MS3_DETAIL}}</span>
+        </div>
+      </div>
+      <div class="sp-milestone">
+        <span class="m-when" data-editable>{{MS4_WHEN}}</span>
+        <div class="m-what">
+          <strong data-editable>{{MS4_NAME}}</strong>
+          <span class="detail" data-editable>{{MS4_DETAIL}}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sp-accept">
+    <h2>Acceptance</h2>
+    <p data-editable>{{ACCEPTANCE_BODY}}</p>
+    <div class="sp-signatures">
+      <div class="sp-sig">
+        <div class="sig-line"></div>
+        <p class="sig-label" data-editable>Client signature · {{CLIENT_SIGNER}}</p>
+      </div>
+      <div class="sp-sig">
+        <div class="sig-line"></div>
+        <p class="sig-label" data-editable>Date</p>
+      </div>
+    </div>
+  </section>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

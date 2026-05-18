@@ -1,0 +1,182 @@
+<!doctype html>
+<!--
+  Daedalus template: newsletter
+  =============================
+  Email-style newsletter issue. Masthead with issue + date, lead story
+  (image + headline + body + byline), 3 quick-hit sidebar items, "from the
+  editor" callout, and a footer with sign-off + subscribe link. Renders in
+  a browser; print/PDF cleanly.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{NEWSLETTER_NAME}} — Issue {{ISSUE_NUMBER}}</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--dae-tint-4); }
+body { font-family: Charter, "Iowan Old Style", Georgia, serif; color: var(--dae-fg); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+
+.newsletter { max-width: 640px; margin: 32px auto; background: var(--dae-bg); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+.nl-masthead { padding: 28px 36px 20px; border-bottom: 3px solid var(--dae-primary); }
+.nl-brand { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.nl-brand .nl-name { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 24px; font-weight: 800; color: var(--dae-primary); letter-spacing: -0.02em; }
+.nl-brand .nl-issue { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--dae-secondary); letter-spacing: 0.10em; text-transform: uppercase; }
+.nl-tagline { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; color: var(--dae-secondary); margin: 0; font-style: italic; }
+
+.nl-toc { padding: 16px 36px; background: var(--dae-tint-4); border-bottom: 1px solid var(--dae-tint-2); font-family: ui-sans-serif, system-ui, sans-serif; font-size: 12px; color: var(--dae-secondary); }
+.nl-toc .toc-label { font-family: ui-monospace, Menlo, monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dae-accent); margin-right: 8px; }
+
+.nl-lead { padding: 36px; }
+.nl-lead .eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dae-warm); margin: 0 0 12px; }
+.nl-lead h1 { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 32px; line-height: 1.15; color: var(--dae-primary); margin: 0 0 16px; font-weight: 800; letter-spacing: -0.02em; }
+.nl-lead .nl-byline { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 12px; color: var(--dae-secondary); margin: 0 0 20px; }
+.nl-lead .nl-byline strong { color: var(--dae-primary); }
+
+.nl-hero { width: 100%; height: 240px; object-fit: cover; display: block; margin: 0 0 24px; border-radius: 4px; }
+
+.nl-lead p { font-size: 17px; line-height: 1.65; color: var(--dae-primary); margin: 0 0 16px; }
+.nl-lead p:first-of-type::first-letter { font-size: 56px; float: left; line-height: 0.9; padding: 8px 8px 0 0; font-weight: 700; color: var(--dae-accent); font-family: ui-sans-serif, system-ui, sans-serif; }
+
+.nl-quick { padding: 24px 36px; background: var(--dae-tint-4); border-top: 1px solid var(--dae-tint-2); border-bottom: 1px solid var(--dae-tint-2); }
+.nl-quick h2 { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.10em; color: var(--dae-secondary); margin: 0 0 16px; }
+.nl-quick-item { display: grid; grid-template-columns: 28px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px dashed var(--dae-tint-2); align-items: baseline; }
+.nl-quick-item:last-child { border-bottom: 0; }
+.nl-quick-item .num { font-family: ui-monospace, Menlo, monospace; font-size: 18px; font-weight: 800; color: var(--dae-accent); line-height: 1; }
+.nl-quick-item .qh-title { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 15px; font-weight: 700; color: var(--dae-primary); margin: 0 0 4px; }
+.nl-quick-item .qh-body { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; line-height: 1.5; color: var(--dae-secondary); margin: 0; }
+.nl-quick-item .qh-body a { color: var(--dae-accent); text-decoration: underline; text-decoration-color: var(--dae-tint-1); text-underline-offset: 2px; }
+
+.nl-from-editor { padding: 28px 36px; background: var(--dae-primary); color: white; }
+.nl-from-editor h2 { font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dae-tint-1); margin: 0 0 12px; }
+.nl-from-editor p { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; line-height: 1.6; margin: 0 0 12px; color: rgba(255,255,255,0.92); }
+.nl-from-editor .nl-signoff { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; color: white; margin-top: 16px; }
+.nl-from-editor .nl-signoff strong { display: block; }
+.nl-from-editor .nl-signoff .role { color: var(--dae-tint-1); font-size: 11px; font-family: ui-monospace, Menlo, monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+
+.nl-footer { padding: 24px 36px; text-align: center; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 12px; color: var(--dae-secondary); line-height: 1.55; }
+.nl-footer p { margin: 0 0 6px; }
+.nl-footer a { color: var(--dae-accent); text-decoration: underline; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+@media print {
+  html, body { background: white !important; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .newsletter { box-shadow: none; margin: 0; max-width: none; }
+  .nl-lead, .nl-quick, .nl-from-editor { page-break-inside: avoid; }
+}
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<article class="newsletter dae-sortable-container" data-pdf-root>
+
+  <header class="nl-masthead">
+    <div class="nl-brand">
+      <span class="nl-name" data-editable>{{NEWSLETTER_NAME}}</span>
+      <span class="nl-issue" data-editable>Issue {{ISSUE_NUMBER}} · {{ISSUE_DATE}}</span>
+    </div>
+    <p class="nl-tagline" data-editable>{{NEWSLETTER_TAGLINE}}</p>
+  </header>
+
+  <div class="nl-toc">
+    <span class="toc-label">In this issue</span>
+    <span data-editable>{{TOC_SUMMARY}}</span>
+  </div>
+
+  <section class="nl-lead">
+    <p class="eyebrow" data-editable>Lead story</p>
+    <h1 data-editable>{{LEAD_HEADLINE}}</h1>
+    <p class="nl-byline">
+      By <strong data-editable>{{LEAD_AUTHOR}}</strong>
+      · <span data-editable>{{LEAD_READ_TIME}} min read</span>
+    </p>
+    <span class="dae-photo-wrap">
+      <img src="{{LEAD_PHOTO_BASE64}}" alt="{{LEAD_PHOTO_ALT}}" class="nl-hero" data-editable-photo>
+    </span>
+    <p data-editable>{{LEAD_PARAGRAPH_1}}</p>
+    <p data-editable>{{LEAD_PARAGRAPH_2}}</p>
+    <p data-editable>{{LEAD_PARAGRAPH_3}}</p>
+  </section>
+
+  <section class="nl-quick dae-sortable-container">
+    <h2>Quick hits</h2>
+    <div class="nl-quick-item">
+      <span class="num">01</span>
+      <div>
+        <p class="qh-title" data-editable>{{QUICK_1_TITLE}}</p>
+        <p class="qh-body" data-editable>{{QUICK_1_BODY}}</p>
+      </div>
+    </div>
+    <div class="nl-quick-item">
+      <span class="num">02</span>
+      <div>
+        <p class="qh-title" data-editable>{{QUICK_2_TITLE}}</p>
+        <p class="qh-body" data-editable>{{QUICK_2_BODY}}</p>
+      </div>
+    </div>
+    <div class="nl-quick-item">
+      <span class="num">03</span>
+      <div>
+        <p class="qh-title" data-editable>{{QUICK_3_TITLE}}</p>
+        <p class="qh-body" data-editable>{{QUICK_3_BODY}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="nl-from-editor">
+    <h2>From the editor</h2>
+    <p data-editable>{{EDITOR_NOTE_1}}</p>
+    <p data-editable>{{EDITOR_NOTE_2}}</p>
+    <div class="nl-signoff">
+      <strong data-editable>— {{EDITOR_NAME}}</strong>
+      <span class="role" data-editable>{{EDITOR_TITLE}}</span>
+    </div>
+  </section>
+
+  <footer class="nl-footer">
+    <p data-editable>You're receiving this because you signed up at {{SIGNUP_SOURCE}}.</p>
+    <p>
+      <a href="{{SUBSCRIBE_LINK}}" data-editable>Forward to a friend</a>
+      ·
+      <a href="{{UNSUBSCRIBE_LINK}}" data-editable>Unsubscribe</a>
+    </p>
+    <p data-editable>{{COPYRIGHT_LINE}}</p>
+  </footer>
+
+</article>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

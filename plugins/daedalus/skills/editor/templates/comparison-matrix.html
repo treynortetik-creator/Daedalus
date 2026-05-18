@@ -1,0 +1,205 @@
+<!doctype html>
+<!--
+  Daedalus template: comparison-matrix
+  ====================================
+  Side-by-side comparison: features as rows, options as columns, "yours"
+  highlighted. Cells can be checkmarks, X marks, or short values. Designed
+  for buyer's-guide pages, internal vendor evals, "us vs. them" landing
+  sections.
+
+  USAGE: see blank.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{MATRIX_TITLE}} — Comparison</title>
+<style>
+:root {
+  --dae-primary: #1a1a1a;
+  --dae-secondary: #4a4a4a;
+  --dae-accent: #0066cc;
+  --dae-warm: #cc3300;
+  --dae-tint-1: #cce0ff;
+  --dae-tint-2: #d8d8d8;
+  --dae-tint-3: #ececec;
+  --dae-tint-4: #f6f6f6;
+  --dae-bg: #ffffff;
+  --dae-fg: #1a1a1a;
+  --check-color: #16a34a;
+  --x-color: #94a3b8;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--dae-bg); }
+body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: var(--dae-fg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+
+.matrix { max-width: 1080px; margin: 0 auto; padding: 72px 32px 96px; }
+
+.cm-header { text-align: center; margin-bottom: 56px; }
+.cm-header .eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dae-accent); margin: 0 0 14px; }
+.cm-header h1 { font-size: 44px; line-height: 1.1; margin: 0 0 16px; color: var(--dae-primary); font-weight: 800; letter-spacing: -0.02em; }
+.cm-header p { font-size: 17px; max-width: 600px; margin: 0 auto; color: var(--dae-secondary); }
+
+.cm-table-wrap { overflow-x: auto; border-radius: 12px; border: 1.5px solid var(--dae-tint-2); margin-bottom: 48px; }
+
+table.cm-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 720px; }
+table.cm-table thead th { padding: 18px 16px; text-align: center; background: var(--dae-tint-4); border-bottom: 2px solid var(--dae-tint-2); vertical-align: bottom; }
+table.cm-table thead th:first-child { text-align: left; }
+table.cm-table thead th .col-name { font-size: 15px; font-weight: 700; color: var(--dae-primary); display: block; }
+table.cm-table thead th .col-sub { font-size: 11px; font-family: ui-monospace, Menlo, monospace; color: var(--dae-secondary); letter-spacing: 0.04em; margin-top: 2px; display: block; }
+table.cm-table thead th.featured { background: var(--dae-primary); color: white; position: relative; }
+table.cm-table thead th.featured .col-name { color: white; }
+table.cm-table thead th.featured .col-sub { color: var(--dae-tint-1); }
+table.cm-table thead th.featured::after { content: "Best fit"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--dae-warm); color: white; font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+
+table.cm-table tbody tr { transition: background 0.15s; }
+table.cm-table tbody tr:nth-child(even) { background: var(--dae-tint-4); }
+table.cm-table tbody td { padding: 14px 16px; text-align: center; border-bottom: 1px solid var(--dae-tint-3); vertical-align: middle; }
+table.cm-table tbody td:first-child { text-align: left; font-weight: 600; color: var(--dae-primary); }
+table.cm-table tbody td.featured { background: rgba(0, 102, 204, 0.04); border-left: 2px solid var(--dae-accent); border-right: 2px solid var(--dae-accent); }
+table.cm-table tbody tr:last-child td.featured { border-bottom: 2px solid var(--dae-accent); }
+
+table.cm-table .feature-name { font-weight: 600; color: var(--dae-primary); display: block; }
+table.cm-table .feature-detail { font-size: 12px; font-weight: 400; color: var(--dae-secondary); margin-top: 2px; display: block; }
+
+table.cm-table .check { color: var(--check-color); font-size: 22px; font-weight: 700; line-height: 1; }
+table.cm-table .x     { color: var(--x-color); font-size: 22px; font-weight: 700; line-height: 1; }
+table.cm-table .partial { color: var(--dae-warm); font-size: 20px; font-weight: 700; line-height: 1; }
+table.cm-table .value { font-family: ui-monospace, Menlo, monospace; font-size: 13px; color: var(--dae-primary); }
+
+.cm-summary { background: var(--dae-tint-4); border-left: 4px solid var(--dae-accent); padding: 24px 28px; border-radius: 4px; margin-bottom: 32px; }
+.cm-summary h2 { font-size: 18px; font-weight: 700; color: var(--dae-primary); margin: 0 0 10px; }
+.cm-summary p { font-size: 15px; line-height: 1.6; color: var(--dae-primary); margin: 0; }
+
+.cm-cta { display: flex; justify-content: center; align-items: center; gap: 16px; }
+.cm-cta .primary { background: var(--dae-warm); color: white; font-weight: 600; font-size: 15px; padding: 14px 28px; border-radius: 999px; text-decoration: none; transition: opacity 0.15s; }
+.cm-cta .primary:hover { opacity: 0.9; }
+.cm-cta .secondary { color: var(--dae-secondary); font-weight: 600; font-size: 14px; text-decoration: underline; text-decoration-color: var(--dae-tint-2); text-underline-offset: 4px; }
+
+.dae-color-1 { color: var(--dae-primary); }
+.dae-color-2 { color: var(--dae-secondary); }
+.dae-color-3 { color: var(--dae-accent); }
+.dae-color-4 { color: var(--dae-warm); }
+.dae-photo-wrap { display: block; position: relative; }
+
+@media print {
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .matrix { padding: 0; max-width: none; }
+  .cm-table-wrap { overflow: visible; page-break-inside: avoid; }
+}
+
+/* DAE_EDIT_CSS_HERE */
+</style>
+</head>
+<body>
+
+<div class="matrix dae-sortable-container" data-pdf-root>
+
+  <header class="cm-header">
+    <p class="eyebrow" data-editable>{{EYEBROW}}</p>
+    <h1 data-editable>{{MATRIX_HEADLINE}}</h1>
+    <p data-editable>{{MATRIX_SUBHEAD}}</p>
+  </header>
+
+  <div class="cm-table-wrap">
+    <table class="cm-table">
+      <thead>
+        <tr>
+          <th><span class="col-name" data-editable>Feature</span></th>
+          <th class="featured">
+            <span class="col-name" data-editable>{{OPTION_A_NAME}}</span>
+            <span class="col-sub" data-editable>{{OPTION_A_SUB}}</span>
+          </th>
+          <th>
+            <span class="col-name" data-editable>{{OPTION_B_NAME}}</span>
+            <span class="col-sub" data-editable>{{OPTION_B_SUB}}</span>
+          </th>
+          <th>
+            <span class="col-name" data-editable>{{OPTION_C_NAME}}</span>
+            <span class="col-sub" data-editable>{{OPTION_C_SUB}}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="dae-sortable-container">
+        <tr>
+          <td>
+            <span class="feature-name" data-editable>{{FEATURE_1_NAME}}</span>
+            <span class="feature-detail" data-editable>{{FEATURE_1_DETAIL}}</span>
+          </td>
+          <td class="featured"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="x">—</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="feature-name" data-editable>{{FEATURE_2_NAME}}</span>
+            <span class="feature-detail" data-editable>{{FEATURE_2_DETAIL}}</span>
+          </td>
+          <td class="featured"><span class="check">✓</span></td>
+          <td><span class="partial">~</span></td>
+          <td><span class="x">—</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="feature-name" data-editable>{{FEATURE_3_NAME}}</span>
+            <span class="feature-detail" data-editable>{{FEATURE_3_DETAIL}}</span>
+          </td>
+          <td class="featured"><span class="value" data-editable>{{F3_VAL_A}}</span></td>
+          <td><span class="value" data-editable>{{F3_VAL_B}}</span></td>
+          <td><span class="value" data-editable>{{F3_VAL_C}}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="feature-name" data-editable>{{FEATURE_4_NAME}}</span>
+            <span class="feature-detail" data-editable>{{FEATURE_4_DETAIL}}</span>
+          </td>
+          <td class="featured"><span class="check">✓</span></td>
+          <td><span class="x">—</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="feature-name" data-editable>{{FEATURE_5_NAME}}</span>
+            <span class="feature-detail" data-editable>{{FEATURE_5_DETAIL}}</span>
+          </td>
+          <td class="featured"><span class="value" data-editable>{{F5_VAL_A}}</span></td>
+          <td><span class="value" data-editable>{{F5_VAL_B}}</span></td>
+          <td><span class="value" data-editable>{{F5_VAL_C}}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="feature-name" data-editable>{{FEATURE_6_NAME}}</span>
+            <span class="feature-detail" data-editable>{{FEATURE_6_DETAIL}}</span>
+          </td>
+          <td class="featured"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="partial">~</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cm-summary">
+    <h2 data-editable>{{SUMMARY_HEADLINE}}</h2>
+    <p data-editable>{{SUMMARY_BODY}}</p>
+  </div>
+
+  <div class="cm-cta">
+    <a href="{{PRIMARY_CTA_LINK}}" class="primary" data-editable>{{PRIMARY_CTA_LABEL}}</a>
+    <a href="{{SECONDARY_CTA_LINK}}" class="secondary" data-editable>{{SECONDARY_CTA_LABEL}}</a>
+  </div>
+
+</div>
+
+<!-- DAE_EDIT_TOOLBAR_HERE -->
+<!-- DAE_SORTABLE_JS_HERE -->
+<!-- DAE_HTML2CANVAS_JS_HERE -->
+<!-- DAE_JSPDF_JS_HERE -->
+
+<script>
+/* DAE_EDIT_JS_HERE */
+</script>
+
+</body>
+</html>

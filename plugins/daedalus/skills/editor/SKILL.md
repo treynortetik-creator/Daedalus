@@ -32,14 +32,18 @@ Skip for: throwaway scratch pages, dev-targeted scripts, or anything that doesn'
    | "blog post", "article", "essay", "writeup", "explainer" | `blog-post.html` |
    | "case study", "customer story", "success story" | `case-study.html` |
    | "changelog", "release notes", "version history", "what's new" | `changelog.html` |
+   | "comparison", "us vs them", "vendor eval", "buyer's guide", "feature matrix" | `comparison-matrix.html` |
    | "dashboard", "KPI", "metrics", "OKR check-in", "weekly numbers" | `dashboard.html` |
    | "invite", "event", "save the date", "RSVP", "launch party" | `invitation.html` |
    | "landing page", "product page", "microsite", "campaign page" | `landing.html` |
    | "memo", "business memo", "internal memo" | `memo.html` |
+   | "newsletter", "digest", "issue", "subscriber update" | `newsletter.html` |
    | "one-pager", "summary", "exec brief", "overview", "product brief" | `onepager.html` |
    | "pricing", "tiers", "plans", "sponsorship packages" | `pricing-table.html` |
+   | "PRD", "product spec", "RFC", "feature brief", "engineering spec", "requirements doc" | `product-spec.html` |
    | "recipe" | `recipe.html` |
    | "resume", "CV", "experience" | `resume.html` |
+   | "proposal", "SOW", "statement of work", "agency pitch", "scope of work" | `sales-proposal.html` |
    | "status report", "weekly update", "project update", "standup notes" | `status-report.html` |
    | something else / unclear | `blank.html` (minimal scaffold, you design from scratch) |
 

@@ -22,7 +22,7 @@ No app. No install. No build step. No server. Works offline. One self-contained 
 | | |
 |---|---|
 | [`dist/editor.html`](dist/) | **Standalone single-file bundle** (~692 KB). Copy it, drop your content inside the `<article data-pdf-root>`, open in a browser. Zero install, no Claude needed. |
-| [`plugins/daedalus/skills/editor/templates/`](plugins/daedalus/skills/editor/templates/) | **13 starter templates** — blank, blog post, case study, changelog, dashboard, invitation, landing page, memo, onepager, pricing table, recipe, resume, status report. The plugin auto-picks based on your request. |
+| [`plugins/daedalus/skills/editor/templates/`](plugins/daedalus/skills/editor/templates/) | **17 starter templates** — blank, blog post, case study, changelog, comparison matrix, dashboard, invitation, landing page, memo, newsletter, onepager, pricing table, product spec, recipe, resume, sales proposal, status report. The plugin auto-picks based on your request. |
 | [`plugins/daedalus/skills/editor/themes/`](plugins/daedalus/skills/editor/themes/) | **4 theme presets** — Greek/sepia, dark mode, minimal, brutalist. Copy-paste CSS overrides. |
 | [`plugins/daedalus/skills/editor/references/editor.md`](plugins/daedalus/skills/editor/references/editor.md) | **The canonical editor reference** — toolbar HTML/CSS/JS as inline-able code blocks + the markup contract + design rationale. ~2,200 lines. |
 | [`plugins/daedalus/`](plugins/daedalus/) | **Claude Code plugin** — invoke `/daedalus` and Claude scaffolds an artifact for you with the editor baked in. |

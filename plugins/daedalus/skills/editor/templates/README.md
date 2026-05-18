@@ -8,14 +8,18 @@ Starting scaffolds for common page types. Each template has the markup contract 
 | `blog-post.html` | Long-form article: byline + hero + body sections + pullquotes + callout | Essays, blog posts, explainers |
 | `case-study.html` | Customer + before/after metrics + pull quote + CTA | Sales case studies, partner outreach |
 | `changelog.html` | Version history with categorized changes (Added/Changed/Fixed/Removed) | Release notes, product changelogs |
+| `comparison-matrix.html` | Feature-vs-option table with "best fit" column highlighted + summary + CTA | Buyer's guides, vendor evals, "us vs. them" landing sections |
 | `dashboard.html` | KPI grid (4-up) + narrative commentary + trend snapshot | Weekly metrics rollups, OKR check-ins, exec dashboards |
 | `invitation.html` | Event card: big date, location, agenda, RSVP button | Event invites, save-the-dates, launch announcements |
 | `landing.html` | Hero + 2×2 features grid + CTA strip | Product launches, campaign pages, microsites |
 | `memo.html` | Formal memo: TO/FROM/RE/DATE header + numbered serif sections | Internal communications, formal notices |
+| `newsletter.html` | Email-style: masthead + lead story + quick hits + editor's note + footer | Weekly/monthly newsletters, internal digests, audience updates |
 | `onepager.html` | Letter portrait: hero + 3-tile proof + CTA | Product overviews, sales handouts, exec summaries |
 | `pricing-table.html` | 3-tier comparison columns with feature checkmarks, middle tier highlighted | SaaS pricing, service tiers, sponsorship packages |
+| `product-spec.html` | PRD layout: status pill + meta grid + problem / goals / non-goals / numbered requirements with priority badges / open questions / changelog | PRDs, RFCs, feature briefs, engineering specs |
 | `recipe.html` | Recipe card: hero photo + meta + ingredients column + numbered steps + notes | Recipes (yes, real recipes), workshop agendas, instructional cards |
 | `resume.html` | Single-page CV: name + contact + summary + experience + skills + education | Resumes, professional bios |
+| `sales-proposal.html` | Client-facing proposal: cover + exec summary + scope + 3-phase approach + investment table + timeline + signature block | Service proposals, SOWs, agency pitches |
 | `status-report.html` | Multi-section: exec summary + RAG status grid + milestones + risks + next steps | Weekly/monthly project updates, exec briefings |
 
 ## How to use a template
@@ -34,4 +38,4 @@ Starting scaffolds for common page types. Each template has the markup contract 
 4. End the page with the standard `DAE_*_HERE` marker block (see any existing template).
 5. Add a row to the table above. PR it.
 
-Good template ideas that aren't shipped yet: dashboard / KPI grid, sales proposal, resume, memo, recipe card, product spec, comparison matrix, changelog.
+Good template ideas that aren't shipped yet: roadmap, FAQ, job description, post-mortem / incident review.
