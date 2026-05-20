@@ -1,0 +1,26 @@
+<!doctype html>
+<!--
+  Daedalus template: test-inlined
+  Keywords: test, inlined, sample
+  Description: A minimal valid pre-inlined fixture
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+[data-pdf-root] { margin: 0; }
+</style>
+</head>
+<body>
+<div class="page" data-pdf-root>
+  <h1 data-editable>{{TITLE}}</h1>
+</div>
+<div class="dae-edit-toolbar">
+  <button>Edit</button>
+</div>
+<script>
+// snapshot the data-pdf-root subtree
+var root = document.querySelector('[data-pdf-root]');
+</script>
+</body>
+</html>

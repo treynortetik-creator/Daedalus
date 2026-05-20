@@ -25,7 +25,11 @@ Skip for: throwaway scratch pages, dev-targeted scripts, or anything that doesn'
 
 1. **Read `references/editor.md`** — that's the full reference. It contains the toolbar's HTML, CSS, and JS code blocks (copy them verbatim into your artifact), the markup contract for editable regions and photos, the theming hooks, and design rationale.
 
-2. **Pick a starting template** based on the user's request — do NOT ask if the match is clear. Use this lookup:
+2. **Pick a starting template** based on the user's request — do NOT ask if the match is clear.
+
+   **First, discover custom templates.** If `~/.daedalus/templates/` exists, list its `*.html` files and read each one's leading HTML comment for `Keywords:` and `Description:` (the convention is documented in `templates/README.md`). Match the user's request against those keywords alongside the bundled lookup below — a custom template is selectable exactly like a bundled one. **On a filename collision with a bundled template, the custom one wins**; note it to the user in one line when it happens (e.g. "Using your custom `onepager.html`."). If `~/.daedalus/templates/` doesn't exist, skip this and use the bundled table only.
+
+   Bundled lookup:
 
    | User mentions / wants | Use template |
    |---|---|
@@ -58,6 +62,8 @@ Skip for: throwaway scratch pages, dev-targeted scripts, or anything that doesn'
    - `<!-- DAE_SORTABLE_JS_HERE -->` → `<script>` with the contents of `assets/sortable.min.js`
    - `<!-- DAE_HTML2CANVAS_JS_HERE -->` → `<script>` with the contents of `assets/html2canvas.min.js`
    - `<!-- DAE_JSPDF_JS_HERE -->` → `<script>` with the contents of `assets/jspdf.umd.min.js`
+
+   **Custom pre-inlined templates skip this step.** A custom template saved from a finished artifact already has the editor code baked in (it has no `DAE_*_HERE` markers). If the chosen template contains no markers, leave it as-is and go straight to filling content.
 
 4. **Mark editable regions** with `data-editable` on any text element, and wrap photos in `<span class="dae-photo-wrap"><img data-editable-photo ...></span>`. Mark sortable containers with `class="dae-sortable-container"`. Set `data-pdf-root` on the top-level wrapper element so PDF export and autosave know which subtree to capture.
 
