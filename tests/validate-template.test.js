@@ -15,5 +15,6 @@ ok(exitCode('missing-editor.html') === 1, 'no editor → exit 1');
 ok(exitCode('missing-pdfroot.html') === 1, 'no data-pdf-root → exit 1');
 ok(exitCode('missing-header.html') === 1, 'no Keywords/Description → exit 1');
 ok(exitCode('partial-markers.html') === 1, 'partial markers → exit 1');
+ok(exitCode('mixed.html') === 1, 'mixed shape (inlined toolbar + stray marker) → exit 1');
 console.log(`\nPASS: ${pass}  FAIL: ${fail}`);
 process.exit(fail === 0 ? 0 : 1);

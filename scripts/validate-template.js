@@ -10,7 +10,8 @@ const stripComments = (h) => h.replace(/<!--[\s\S]*?-->/g, '');
 function validate(html) {
   const errors = [];
   const stripped = stripComments(html);
-  // 1. Editor present — one clean shape, never a mix. (markers live in comments → scan raw)
+  // 1. Editor present — one clean shape, never a mix. (markers live in comments → scan raw.
+  //    Smoke-check limitation: a marker name appearing in header prose counts toward the total.)
   const present = MARKERS.filter(m => html.includes(m));
   const hasToolbar = /class=["'][^"']*\bdae-edit-toolbar\b/.test(stripped);
   if (hasToolbar && present.length === 0) { /* pre-inlined ok */ }
