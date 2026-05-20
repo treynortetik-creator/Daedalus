@@ -1,6 +1,6 @@
 {
   "name": "daedalus",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "private": true,
   "description": "Drop-in HTML editor that turns any static page into a round-trip editable artifact.",
   "homepage": "https://github.com/treynortetik-creator/Daedalus",

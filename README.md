@@ -43,6 +43,10 @@ Then in any conversation:
 
 Claude will infer the page type from your request ("a one-pager about X", "a blog post on Y", "weekly status report for Z" → matches `onepager` / `blog-post` / `status-report` templates respectively) and skip questions it can answer from the brief. Output saves to `~/Downloads/[topic].html`. Open in any browser.
 
+### Custom templates
+
+Build your own reusable templates with `/daedalus:template` — import an HTML file, save an artifact you just made as a template, or generate one from a description. They live in `~/.daedalus/templates/` (so they survive plugin updates) and `/daedalus` auto-discovers them by keyword, exactly like the built-in ones. See [templates/README.md](plugins/daedalus/skills/editor/templates/README.md#custom-templates-your-own-library).
+
 ## Use without Claude Code
 
 You don't need Claude. Two paths:

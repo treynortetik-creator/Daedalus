@@ -39,3 +39,25 @@ Starting scaffolds for common page types. Each template has the markup contract 
 5. Add a row to the table above. PR it.
 
 Good template ideas that aren't shipped yet: roadmap, FAQ, job description, post-mortem / incident review.
+
+## Custom templates (your own library)
+
+The templates above ship with the plugin. You can also build your own library that **survives plugin updates** — they live in `~/.daedalus/templates/`, outside the plugin cache. `/daedalus` auto-discovers them at scaffold time and matches them by keyword exactly like the bundled ones. On a filename collision, your custom template wins.
+
+Create and manage them with **`/daedalus:template`**:
+- **import** an existing HTML file as a template,
+- **save-as** — turn an artifact you just generated into a reusable template,
+- **generate** a new template from a description,
+- **list** / **delete** your library.
+
+Each custom template carries a metadata header as its leading HTML comment — this is what makes it discoverable:
+
+```html
+<!--
+  Daedalus template: podcast-shownotes
+  Keywords: podcast, show notes, episode, transcript, chapters
+  Description: Episode metadata + chapter list + transcript
+-->
+```
+
+`Keywords` (comma-separated) drive auto-selection; `Description` shows in `list`. A custom template can be either **marker-style** (lean, with `DAE_*_HERE` markers — what `generate` produces) or **pre-inlined** (the editor already baked in — what `save-as` produces); `/daedalus` handles both.
