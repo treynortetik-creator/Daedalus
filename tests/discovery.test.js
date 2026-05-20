@@ -6,7 +6,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { parseTemplateHeader } = require('../scripts/template-meta');
+const { parseTemplateHeader } = require('../plugins/daedalus/skills/template-manager/scripts/template-meta');
 let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) { pass++; console.log('  PASS ' + m); } else { fail++; console.log('  FAIL ' + m); } };
 

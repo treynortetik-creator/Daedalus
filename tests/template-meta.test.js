@@ -1,6 +1,6 @@
 // tests/template-meta.test.js
 const assert = require('assert');
-const { parseTemplateHeader, firstComment } = require('../scripts/template-meta');
+const { parseTemplateHeader, firstComment } = require('../plugins/daedalus/skills/template-manager/scripts/template-meta');
 let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) { pass++; console.log('  PASS ' + m); } else { fail++; console.log('  FAIL ' + m); } };
 
